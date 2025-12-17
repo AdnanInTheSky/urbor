@@ -1,0 +1,57 @@
+media:
+  input: content/images
+  output: /content/images
+  extensions: [jpg, jpeg, png, webp, gif]
+
+content:
+ 
+
+  # Team Members Collection
+  - name: team
+    label: Team Members
+    type: collection
+    path: content/teams
+    format: yaml-frontmatter
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: role
+        type: string
+        required: true
+      - name: image
+        type: image
+        required: false
+        description: "Photo of the team member"
+      - name: tags
+        type: string
+        list: true
+      - name: body
+        type: rich-text
+        required: true
+
+ 
+
+  # Projects Collection (inferred from your HTML)
+  - name: projects
+    label: Projects
+    type: collection
+    path: content/projects
+    format: yaml-frontmatter
+    fields:
+      - name: title
+        type: string
+        required: true
+      - name: date
+        type: date
+        required: true
+      - name: image
+        type: image
+        required: false
+        description: "Featured image for the project"
+      - name: tags
+        type: string
+        list: true
+      - name: body
+        type: rich-text
+        required: true
