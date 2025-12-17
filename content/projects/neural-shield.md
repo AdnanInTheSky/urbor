@@ -7,10 +7,10 @@ tags: ["security", "rust"]
 ---
 A next-gen intrusion prevention system powered by real-time quantum entropy analysis.
 
-## 🔑 Key Details
+## Key Details
 - **Status**: DEPLOYED
 - **Tech Stack**: Rust, eBPF, WebAssembly
 - **Impact**: Blocked 94% of zero-day exploits
 
-## 📌 Summary
+# Summary
 Now protecting 3 Fortune 500 networks.

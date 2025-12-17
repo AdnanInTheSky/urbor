@@ -52,13 +52,28 @@
             margin-bottom: 1rem;
             color: var(--text-primary);
         }
-        .detail-content h2, .detail-content h3 {
+        .detail-content h2 {
+            font-size: 1.5rem;
             margin: 1.5rem 0 1rem;
+            color: var(--text-primary);
+        }
+        .detail-content h3 {
+            font-size: 1.25rem;
+            margin: 1.25rem 0 0.75rem;
             color: var(--text-primary);
         }
         .detail-content p, .detail-content ul, .detail-content ol {
             margin-bottom: 1rem;
             color: var(--text-secondary);
+        }
+        .detail-content ul {
+            padding-left: 1.5rem;
+        }
+        .detail-content li {
+            margin-bottom: 0.5rem;
+        }
+        .detail-content strong {
+            color: var(--text-primary);
         }
         .detail-content a {
             color: var(--accent-teal);
@@ -87,6 +102,63 @@
             return div.innerHTML;
         }
 
+        function markdownToHtml(md) {
+            // Handle fenced code blocks or triple dashes safely (not needed here, but safe)
+            // First, split into lines for block-level parsing
+            let lines = md.split('\n');
+            let html = '';
+            let i = 0;
+
+            while (i < lines.length) {
+                let line = lines[i].trim();
+
+                // Headings
+                if (line.startsWith('### ')) {
+                    html += `<h3>${escapeHtml(line.slice(4))}</h3>\n`;
+                    i++;
+                } else if (line.startsWith('## ')) {
+                    html += `<h2>${escapeHtml(line.slice(3))}</h2>\n`;
+                    i++;
+                } else if (line.startsWith('# ')) {
+                    html += `<h1>${escapeHtml(line.slice(2))}</h1>\n`;
+                    i++;
+                }
+                // Unordered list
+                else if (line.startsWith('- ')) {
+                    html += '<ul>\n';
+                    while (i < lines.length && lines[i].trim().startsWith('- ')) {
+                        let item = lines[i].trim().slice(2);
+                        // Apply inline formatting inside list items
+                        item = item
+                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                            .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+                        html += `<li>${item}</li>\n`;
+                        i++;
+                    }
+                    html += '</ul>\n';
+                }
+                // Paragraph (including multi-line)
+                else if (line !== '') {
+                    let para = '';
+                    while (i < lines.length && lines[i].trim() !== '') {
+                        para += lines[i] + ' ';
+                        i++;
+                    }
+                    // Apply inline formatting
+                    para = para.trim()
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+                    html += `<p>${escapeHtml(para)}</p>\n`;
+                } else {
+                    i++; // skip empty lines
+                }
+            }
+
+            return html;
+        }
+
         async function loadProjectDetail() {
             const urlParams = new URLSearchParams(window.location.search);
             const filename = urlParams.get('id');
@@ -102,56 +174,63 @@
                 if (!res.ok) throw new Error('Project not found');
                 const text = await res.text();
 
-                // Simple frontmatter parser (reuse from index.html)
+                // Parse frontmatter and body
                 const match = text.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
                 const data = {};
-                let content = text;
+                let content = '';
                 if (match) {
                     const yaml = match[1];
                     content = match[2];
                     yaml.split('\n').forEach(line => {
-                        const i = line.indexOf(':');
-                        if (i > 0) {
-                            let key = line.slice(0, i).trim();
-                            let val = line.slice(i + 1).trim().replace(/^["']|["']$/g, '');
+                        const colonIndex = line.indexOf(':');
+                        if (colonIndex > 0) {
+                            let key = line.slice(0, colonIndex).trim();
+                            let val = line.slice(colonIndex + 1).trim();
+
+                            // Remove surrounding quotes if present
+                            if ((val.startsWith('"') && val.endsWith('"')) ||
+                                (val.startsWith("'") && val.endsWith("'"))) {
+                                val = val.slice(1, -1);
+                            }
+
+                            // Parse array if it looks like JSON array
+                            if (val.startsWith('[') && val.endsWith(']')) {
+                                try {
+                                    val = JSON.parse(val);
+                                } catch (e) {
+                                    // fallback to string
+                                }
+                            }
+
                             data[key] = val;
                         }
                     });
+                } else {
+                    // No frontmatter – treat whole file as content
+                    content = text;
                 }
 
-                // Render Markdown-like content (basic)
-                let html = content
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
-                    .split('\n\n')
-                    .map(paragraph => {
-                        paragraph = paragraph.trim();
-                        if (paragraph.startsWith('# ')) return `<h1>${escapeHtml(paragraph.slice(2))}</h1>`;
-                        if (paragraph.startsWith('## ')) return `<h2>${escapeHtml(paragraph.slice(3))}</h2>`;
-                        if (paragraph.startsWith('### ')) return `<h3>${escapeHtml(paragraph.slice(4))}</h3>`;
-                        if (paragraph.startsWith('- ')) {
-                            const items = paragraph.split('\n').map(i => `<li>${escapeHtml(i.slice(2))}</li>`).join('');
-                            return `<ul>${items}</ul>`;
-                        }
-                        return `<p>${escapeHtml(paragraph)}</p>`;
-                    })
-                    .join('\n');
+                const htmlContent = markdownToHtml(content.trim());
 
-                const dateStr = data.date ? new Date(data.date).toLocaleDateString() : '';
+                const dateStr = data.date ? new Date(data.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }) : '';
                 const meta = dateStr ? `<div class="detail-meta">Published: ${dateStr}</div>` : '';
 
                 container.innerHTML = `
                     <div class="project-detail">
-                        ${data.image ? `<img src="${data.image}" class="detail-image" alt="${data.title}">` : ''}
+                        ${data.image ? `<img src="${data.image}" class="detail-image" alt="${escapeHtml(data.title || 'Project')}">` : ''}
                         <div class="detail-content">
                             <h1>${escapeHtml(data.title || 'Untitled Project')}</h1>
                             ${meta}
-                            ${html}
+                            ${htmlContent}
                         </div>
                     </div>
                 `;
             } catch (err) {
+                console.error(err);
                 container.innerHTML = `<div class="error">Failed to load project: ${err.message}</div>`;
             }
         }
