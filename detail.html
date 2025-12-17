@@ -16,27 +16,35 @@
             --border-light: #e2e8f0;
         }
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: var(--accent-white);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+             background: linear-gradient(to bottom right, #0066cc, #90ee90);
             color: var(--text-primary);
             line-height: 1.6;
             padding: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+ 
         .back-link {
             display: inline-block;
             margin-bottom: 2rem;
             color: var(--accent-teal);
             text-decoration: none;
             font-weight: 600;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
         }
         .project-detail {
             background: white;
             border: 1px solid var(--border-light);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 1000px;
         }
         .detail-image {
             width: 100%;
@@ -88,6 +96,15 @@
             padding: 2rem;
             text-align: center;
             color: var(--accent-teal);
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 1000px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        #detail-container {
+            width: 100%;
+            max-width: 1000px;
         }
     </style>
 </head>
@@ -103,8 +120,6 @@
         }
 
         function markdownToHtml(md) {
-            // Handle fenced code blocks or triple dashes safely (not needed here, but safe)
-            // First, split into lines for block-level parsing
             let lines = md.split('\n');
             let html = '';
             let i = 0;
@@ -112,7 +127,6 @@
             while (i < lines.length) {
                 let line = lines[i].trim();
 
-                // Headings
                 if (line.startsWith('### ')) {
                     html += `<h3>${escapeHtml(line.slice(4))}</h3>\n`;
                     i++;
@@ -123,12 +137,10 @@
                     html += `<h1>${escapeHtml(line.slice(2))}</h1>\n`;
                     i++;
                 }
-                // Unordered list
                 else if (line.startsWith('- ')) {
                     html += '<ul>\n';
                     while (i < lines.length && lines[i].trim().startsWith('- ')) {
                         let item = lines[i].trim().slice(2);
-                        // Apply inline formatting inside list items
                         item = item
                             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                             .replace(/\*(.*?)\*/g, '<em>$1</em>')
@@ -138,24 +150,21 @@
                     }
                     html += '</ul>\n';
                 }
-                // Paragraph (including multi-line)
                 else if (line !== '') {
                     let para = '';
                     while (i < lines.length && lines[i].trim() !== '') {
                         para += lines[i] + ' ';
                         i++;
                     }
-                    // Apply inline formatting
                     para = para.trim()
                         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                         .replace(/\*(.*?)\*/g, '<em>$1</em>')
                         .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
                     html += `<p>${escapeHtml(para)}</p>\n`;
                 } else {
-                    i++; // skip empty lines
+                    i++;
                 }
             }
-
             return html;
         }
 
@@ -174,7 +183,6 @@
                 if (!res.ok) throw new Error('Project not found');
                 const text = await res.text();
 
-                // Parse frontmatter and body
                 const match = text.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
                 const data = {};
                 let content = '';
@@ -187,26 +195,21 @@
                             let key = line.slice(0, colonIndex).trim();
                             let val = line.slice(colonIndex + 1).trim();
 
-                            // Remove surrounding quotes if present
                             if ((val.startsWith('"') && val.endsWith('"')) ||
                                 (val.startsWith("'") && val.endsWith("'"))) {
                                 val = val.slice(1, -1);
                             }
 
-                            // Parse array if it looks like JSON array
                             if (val.startsWith('[') && val.endsWith(']')) {
                                 try {
                                     val = JSON.parse(val);
-                                } catch (e) {
-                                    // fallback to string
-                                }
+                                } catch (e) {}
                             }
 
                             data[key] = val;
                         }
                     });
                 } else {
-                    // No frontmatter – treat whole file as content
                     content = text;
                 }
 

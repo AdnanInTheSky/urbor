@@ -10,7 +10,7 @@
       theme: {
         extend: {
           backgroundImage: {
-            'gradient-custom': 'linear-gradient(to bottom right, #e0f7fa, #f1f8e9)',
+            'gradient-custom': 'linear-gradient(to bottom right, #0d47a1, #a5d6a7)',
           }
         }
       }
@@ -24,26 +24,66 @@
       border: 1px solid rgba(255, 255, 255, 0.6);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
     }
+    .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    .rounded-logo {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-decoration: none;
+          padding: 0.5rem;
+        }
+
+    .rounded-logo img {
+           height: 48px;
+          width: auto;
+        }
+        
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #374151;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover {
+      color: #1e3a8a;
+    }
   </style>
 </head>
 <body class="bg-gradient-custom min-h-screen flex flex-col font-sans">
 
   <!-- Navbar -->
-    <nav>
-        <div class="nav-container">
-            <a href="#" class="logo">HopeForward</a>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#team">Team</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+  <nav class="bg-white/80 backdrop-blur-sm shadow-sm">
+    <div class="nav-container">
+      <a href="#" class="rounded-logo" aria-label="Urbor Logo">
+                     <img src="content/images/URBOR.png" alt="Urbor Logo" />
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about.html" class="text-blue-700 font-medium">About</a></li>
+        <li><a href="/">projects</a></li>
+        <li><a href="/">Team</a></li>
+        <li><a href="/">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
   <!-- Main Content -->
   <main class="flex-grow px-6 py-12">
-    <div class="max-w-4xl mx-auto w-full">
+    <!-- Reduced width: max-w-3xl for tighter, more professional appearance -->
+    <div class="max-w-3xl mx-auto w-full">
       <div class="pure-glass w-full p-8">
         <h1 class="text-3xl font-bold text-gray-800 mb-6">About Us</h1>
 
@@ -74,8 +114,8 @@
   </main>
 
   <!-- Footer -->
-  <footer class="px-6 py-6 text-center text-sm text-gray-600 border-t border-gray-200">
-    <p>&copy; 2025 NGO Name. All rights reserved.</p>
+  <footer class="px-6 py-6 text-center text-sm text-gray-600 border-t border-gray-200 bg-white/80">
+    <p>&copy; 2025 Urbor. All rights reserved.</p>
   </footer>
 
 </body>
