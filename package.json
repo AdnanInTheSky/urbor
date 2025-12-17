@@ -1,12 +1,10 @@
 {
-  "name": "ngo-website",
+  "name": "cybercore",
   "version": "1.0.0",
-  "description": "A static NGO website managed by Pages CMS",
-  "main": "index.html",
   "scripts": {
-    "build": "node generateIndex.js"
+    "build": "node generate-manifest.mjs"
   },
-  "keywords": ["static", "cms", "ngo", "vercel"],
-  "author": "Your Name",
-  "license": "MIT"
+  "engines": {
+    "node": ">=18"
+  }
 }

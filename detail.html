@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Detail - CYBERCORE</title>
+    <style>
+        /* Reuse minimal critical styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-dark: #0f172a;
+            --accent-teal: #0d9488;
+            --accent-white: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-light: #e2e8f0;
+        }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--accent-white);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--accent-teal);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .project-detail {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .detail-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            background: var(--primary-dark);
+        }
+        .detail-content {
+            padding: 2.5rem;
+        }
+        .detail-content h1 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .detail-content h2, .detail-content h3 {
+            margin: 1.5rem 0 1rem;
+            color: var(--text-primary);
+        }
+        .detail-content p, .detail-content ul, .detail-content ol {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+        .detail-content a {
+            color: var(--accent-teal);
+            text-decoration: none;
+        }
+        .detail-meta {
+            color: var(--accent-teal);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+        .loading, .error {
+            padding: 2rem;
+            text-align: center;
+            color: var(--accent-teal);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Back to Projects</a>
+    <div id="detail-container" class="loading">Loading project...</div>
+
+    <script>
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        async function loadProjectDetail() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const filename = urlParams.get('id');
+            const container = document.getElementById('detail-container');
+
+            if (!filename || filename.includes('..') || filename.includes('/')) {
+                container.innerHTML = '<div class="error">Invalid project ID</div>';
+                return;
+            }
+
+            try {
+                const res = await fetch(`/content/projects/${filename}`);
+                if (!res.ok) throw new Error('Project not found');
+                const text = await res.text();
+
+                // Simple frontmatter parser (reuse from index.html)
+                const match = text.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
+                const data = {};
+                let content = text;
+                if (match) {
+                    const yaml = match[1];
+                    content = match[2];
+                    yaml.split('\n').forEach(line => {
+                        const i = line.indexOf(':');
+                        if (i > 0) {
+                            let key = line.slice(0, i).trim();
+                            let val = line.slice(i + 1).trim().replace(/^["']|["']$/g, '');
+                            data[key] = val;
+                        }
+                    });
+                }
+
+                // Render Markdown-like content (basic)
+                let html = content
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
+                    .split('\n\n')
+                    .map(paragraph => {
+                        paragraph = paragraph.trim();
+                        if (paragraph.startsWith('# ')) return `<h1>${escapeHtml(paragraph.slice(2))}</h1>`;
+                        if (paragraph.startsWith('## ')) return `<h2>${escapeHtml(paragraph.slice(3))}</h2>`;
+                        if (paragraph.startsWith('### ')) return `<h3>${escapeHtml(paragraph.slice(4))}</h3>`;
+                        if (paragraph.startsWith('- ')) {
+                            const items = paragraph.split('\n').map(i => `<li>${escapeHtml(i.slice(2))}</li>`).join('');
+                            return `<ul>${items}</ul>`;
+                        }
+                        return `<p>${escapeHtml(paragraph)}</p>`;
+                    })
+                    .join('\n');
+
+                const dateStr = data.date ? new Date(data.date).toLocaleDateString() : '';
+                const meta = dateStr ? `<div class="detail-meta">Published: ${dateStr}</div>` : '';
+
+                container.innerHTML = `
+                    <div class="project-detail">
+                        ${data.image ? `<img src="${data.image}" class="detail-image" alt="${data.title}">` : ''}
+                        <div class="detail-content">
+                            <h1>${escapeHtml(data.title || 'Untitled Project')}</h1>
+                            ${meta}
+                            ${html}
+                        </div>
+                    </div>
+                `;
+            } catch (err) {
+                container.innerHTML = `<div class="error">Failed to load project: ${err.message}</div>`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProjectDetail);
+    </script>
+</body>
+</html>
