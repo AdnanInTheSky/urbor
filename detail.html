@@ -1,257 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Detail - CYBERCORE</title>
-    <style>
-        /* Reuse minimal critical styles */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary-dark: #0f172a;
-            --accent-teal: #0d9488;
-            --accent-white: #f8fafc;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --border-light: #e2e8f0;
-        }
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(to bottom right, #0066cc, #90ee90);
-            color: var(--text-primary);
-            line-height: 1.6;
-            padding: 2rem;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
- 
-        .back-link {
-            display: inline-block;
-            margin-bottom: 2rem;
-            color: var(--accent-teal);
-            text-decoration: none;
-            font-weight: 600;
-            background: white;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-        }
-        .project-detail {
-            background: white;
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            width: 100%;
-            max-width: 1000px;
-        }
-        .detail-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            background: var(--primary-dark);
-        }
-        .detail-content {
-            padding: 2.5rem;
-        }
-        .detail-content h1 {
-            font-size: 2.2rem;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-        .detail-content h2 {
-            font-size: 1.5rem;
-            margin: 1.5rem 0 1rem;
-            color: var(--text-primary);
-        }
-        .detail-content h3 {
-            font-size: 1.25rem;
-            margin: 1.25rem 0 0.75rem;
-            color: var(--text-primary);
-        }
-        .detail-content p, .detail-content ul, .detail-content ol {
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
-        }
-        .detail-content ul {
-            padding-left: 1.5rem;
-        }
-        .detail-content li {
-            margin-bottom: 0.5rem;
-        }
-        .detail-content strong {
-            color: var(--text-primary);
-        }
-        .detail-content a {
-            color: var(--accent-teal);
-            text-decoration: none;
-        }
-        .detail-meta {
-            color: var(--accent-teal);
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
-        }
-        .loading, .error {
-            padding: 2rem;
-            text-align: center;
-            color: var(--accent-teal);
-            background: white;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 1000px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        #detail-container {
-            width: 100%;
-            max-width: 1000px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loading... - CYBERCORE</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    * {
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom right, #0066cc, #90ee90);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 1.25rem;
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .article-content {
+      line-height: 1.7;
+      font-size: 1.125rem;
+      color: #0f172a;
+    }
+
+    .article-content h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin: 1.5rem 0 1.25rem;
+      line-height: 1.2;
+      color: #0f172a;
+    }
+
+    .article-content h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 2rem 0 1rem;
+      color: #1e293b;
+    }
+
+    .article-content p,
+    .article-content ul,
+    .article-content ol {
+      margin-bottom: 1.25rem;
+      color: #475569;
+    }
+
+    .article-content ul {
+      padding-left: 1.5rem;
+    }
+
+    .article-content li {
+      margin-bottom: 0.5rem;
+    }
+
+    .article-content strong {
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    .article-content a {
+      color: #0d9488;
+      text-decoration: underline;
+    }
+  </style>
 </head>
-<body>
-    <a href="index.html" class="back-link">← Back to Projects</a>
-    <div id="detail-container" class="loading">Loading project...</div>
 
-    <script>
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+<body class="min-h-screen text-slate-800">
+  <main class="max-w-3xl mx-auto px-4 py-12">
+    <a href="index.html" class="inline-block mb-6 text-teal-600 font-medium hover:text-teal-800">← Back to Projects</a>
+
+    <div class="glass-card p-6 md:p-8">
+      <header class="mb-8">
+        <img id="article-image" class="w-full h-64 object-cover rounded-xl mb-6 bg-slate-200" alt="Project Image" />
+        <h1 id="article-title" class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">Loading...</h1>
+        <div class="text-teal-600 text-sm">
+          Published: <span id="article-date">—</span>
+        </div>
+      </header>
+
+      <article id="article-body" class="article-content">
+        <div class="flex justify-center py-10">
+          <div class="w-8 h-8 border-4 border-teal-400 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <script>
+    function parseYAML(yamlStr) {
+      const result = {};
+      yamlStr.trim().split('\n').forEach(line => {
+        const idx = line.indexOf(':');
+        if (idx === -1) return;
+        let key = line.slice(0, idx).trim();
+        let val = line.slice(idx + 1).trim().replace(/^[\"']|[\"']$/g, '');
+        result[key] = val;
+      });
+      return result;
+    }
+
+    function cleanLine(line) {
+      if (!line) return '';
+      line = line.replace(/\u00A0/g, ' '); // nbsp → space
+      line = line.replace(/\s+$/, '');     // trim trailing space
+      line = line.replace(/[()\[\]{}.,;:!?~`\-_]+$/, ''); // remove trailing punctuation like "   ("
+      return line.trim();
+    }
+
+    function convertBold(text) {
+      return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    }
+
+    function parseMarkdownLike(content) {
+      let lines = content.split('\n');
+      let html = '';
+      let i = 0;
+
+      while (i < lines.length) {
+        let rawLine = lines[i];
+        let line = rawLine.trim();
+
+        // Skip empty
+        if (line === '') {
+          i++;
+          continue;
         }
 
-        function markdownToHtml(md) {
-            let lines = md.split('\n');
-            let html = '';
-            let i = 0;
-
-            while (i < lines.length) {
-                let line = lines[i].trim();
-
-                if (line.startsWith('### ')) {
-                    html += `<h3>${escapeHtml(line.slice(4))}</h3>\n`;
-                    i++;
-                } else if (line.startsWith('## ')) {
-                    html += `<h2>${escapeHtml(line.slice(3))}</h2>\n`;
-                    i++;
-                } else if (line.startsWith('# ')) {
-                    html += `<h1>${escapeHtml(line.slice(2))}</h1>\n`;
-                    i++;
-                }
-                else if (line.startsWith('- ')) {
-                    html += '<ul>\n';
-                    while (i < lines.length && lines[i].trim().startsWith('- ')) {
-                        let item = lines[i].trim().slice(2);
-                        // 🔥 CRITICAL FIX: Skip unwanted placeholder line
-                        if (item.trim().toLowerCase() === "fresh harvest cost") {
-                            i++;
-                            continue;
-                        }
-                        item = item
-                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                            .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                            .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
-                        html += `<li>${item}</li>\n`;
-                        i++;
-                    }
-                    html += '</ul>\n';
-                }
-                else if (line !== '') {
-                    let para = '';
-                    while (i < lines.length && lines[i].trim() !== '') {
-                        para += lines[i] + ' ';
-                        i++;
-                    }
-                    para = para.trim()
-                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
-                    // Also prevent orphaned "Fresh harvest cost" in paragraphs
-                    if (para.toLowerCase().trim() === "fresh harvest cost") {
-                        continue;
-                    }
-                    html += `<p>${escapeHtml(para)}</p>\n`;
-                } else {
-                    i++;
-                }
-            }
-            return html;
+        // Detect bullet: * ...
+        if (line.startsWith('* ')) {
+          html += '<ul>\n';
+          while (i < lines.length && lines[i].trim().startsWith('* ')) {
+            let item = lines[i].trim().slice(2);
+            item = cleanLine(item);
+            if (item) html += `<li>${convertBold(item)}</li>\n`;
+            i++;
+          }
+          html += '</ul>\n';
         }
-
-        async function loadProjectDetail() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const filename = urlParams.get('id');
-            const container = document.getElementById('detail-container');
-
-            if (!filename || filename.includes('..') || filename.includes('/')) {
-                container.innerHTML = '<div class="error">Invalid project ID</div>';
-                return;
-            }
-
-            try {
-                const res = await fetch(`/content/projects/${filename}`);
-                if (!res.ok) throw new Error('Project not found');
-                let text = await res.text();
-
-                // Optional: Apply global cleanup (in case it appears outside lists)
-                // This is redundant with list filter but safe
-                text = text.replace(/^\*\s*Fresh harvest cost\s*$/gim, '');
-
-                const match = text.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
-                const data = {};
-                let content = '';
-                if (match) {
-                    const yaml = match[1];
-                    content = match[2];
-                    yaml.split('\n').forEach(line => {
-                        const colonIndex = line.indexOf(':');
-                        if (colonIndex > 0) {
-                            let key = line.slice(0, colonIndex).trim();
-                            let val = line.slice(colonIndex + 1).trim();
-
-                            if ((val.startsWith('"') && val.endsWith('"')) ||
-                                (val.startsWith("'") && val.endsWith("'"))) {
-                                val = val.slice(1, -1);
-                            }
-
-                            if (val.startsWith('[') && val.endsWith(']')) {
-                                try {
-                                    val = JSON.parse(val);
-                                } catch (e) {}
-                            }
-
-                            data[key] = val;
-                        }
-                    });
-                } else {
-                    content = text;
-                }
-
-                const htmlContent = markdownToHtml(content.trim());
-
-                const dateStr = data.date ? new Date(data.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                }) : '';
-                const meta = dateStr ? `<div class="detail-meta">Published: ${dateStr}</div>` : '';
-
-                container.innerHTML = `
-                    <div class="project-detail">
-                        ${data.image ? `<img src="${escapeHtml(data.image)}" class="detail-image" alt="${escapeHtml(data.title || 'Project')}">` : ''}
-                        <div class="detail-content">
-                            <h1>${escapeHtml(data.title || 'Untitled Project')}</h1>
-                            ${meta}
-                            ${htmlContent}
-                        </div>
-                    </div>
-                `;
-            } catch (err) {
-                console.error(err);
-                container.innerHTML = `<div class="error">Failed to load project: ${err.message}</div>`;
-            }
+        // Detect full-line bold heading: **Text:**
+        else if (/^\*\*[^*]+:\*\*$/.test(line)) {
+          let clean = line
+            .replace(/\*\*/g, '')
+            .replace(/:$/, '')
+            .trim();
+          clean = cleanLine(clean);
+          if (clean) html += `<h2>${clean}</h2>\n`;
+          i++;
         }
+        // Regular paragraph (may contain **bold**)
+        else {
+          let para = '';
+          while (
+            i < lines.length &&
+            !lines[i].trim().startsWith('* ') &&
+            !/^\*\*[^*]+:\*\*$/.test(lines[i].trim()) &&
+            lines[i].trim() !== ''
+          ) {
+            para += lines[i] + '\n';
+            i++;
+          }
+          para = cleanLine(para);
+          if (para) html += `<p>${convertBold(para)}</p>\n`;
+        }
+      }
+      return html;
+    }
 
-        document.addEventListener('DOMContentLoaded', loadProjectDetail);
-    </script>
+    async function loadProject() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const filename = urlParams.get('id');
+      const container = document.getElementById('article-body');
+
+      if (!filename || filename.includes('..') || filename.includes('/')) {
+        container.innerHTML = '<p class="text-center text-red-600 mt-6">Invalid project ID.</p>';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/content/projects/${filename}`);
+        if (!res.ok) throw new Error('Not found');
+        let text = await res.text();
+
+        const parts = text.split(/^---\s*$/m);
+        if (parts.length < 3) throw new Error('Invalid format');
+
+        const frontmatter = parts[1];
+        const content = parts.slice(2).join('---');
+
+        const meta = parseYAML(frontmatter);
+        const htmlContent = parseMarkdownLike(content);
+
+        document.getElementById('article-title').textContent = meta.title || 'Untitled Project';
+        document.getElementById('article-image').src = meta.image || '';
+        document.getElementById('article-image').style.display = meta.image ? 'block' : 'none';
+        document.getElementById('article-date').textContent = meta.date
+          ? new Date(meta.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+          : '—';
+        container.innerHTML = htmlContent;
+        document.title = `${meta.title || 'Project'} - CYBERCORE`;
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `<p class="text-center text-red-600 mt-6">Failed to load: ${err.message}</p>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadProject);
+  </script>
 </body>
 </html>
