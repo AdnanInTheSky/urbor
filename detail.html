@@ -26,12 +26,12 @@
     }
 
     .glass-card {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.6); /* white glass */
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 1.25rem;
-      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.1);
       overflow: hidden;
     }
 
@@ -85,8 +85,6 @@
 
 <body class="min-h-screen text-slate-800">
   <main class="max-w-3xl mx-auto px-4 py-12">
-    <a href="index.html" class="inline-block mb-6 text-teal-600 font-medium hover:text-teal-800">← Back to Projects</a>
-
     <div class="glass-card p-6 md:p-8">
       <header class="mb-8">
         <img id="article-image" class="w-full h-64 object-cover rounded-xl mb-6 bg-slate-200" alt="Project Image" />
@@ -101,6 +99,13 @@
           <div class="w-8 h-8 border-4 border-teal-400 border-t-transparent rounded-full animate-spin"></div>
         </div>
       </article>
+
+      <!-- Back button at the bottom -->
+      <div class="mt-8 pt-6 border-t border-gray-200">
+        <a href="index.html" class="inline-block text-teal-600 font-medium hover:text-teal-800">
+          ← Back to Projects
+        </a>
+      </div>
     </div>
   </main>
 
