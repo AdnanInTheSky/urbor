@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About Us | NGO</title>
+  <!-- Tailwind CSS CDN (cleaned up URL) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -11,6 +12,13 @@
         extend: {
           backgroundImage: {
             'gradient-custom': 'linear-gradient(to bottom right, #0d47a1, #a5d6a7)',
+          },
+          colors: {
+            primary: '#1e3a8a',
+            gray: {
+              700: '#374151',
+              800: '#1f2937'
+            }
           }
         }
       }
@@ -24,68 +32,52 @@
       border: 1px solid rgba(255, 255, 255, 0.6);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
     }
-    .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-    .rounded-logo {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-decoration: none;
-          padding: 0.5rem;
-        }
-
-    .rounded-logo img {
-           height: 48px;
-          width: auto;
-        }
-        
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-    .nav-links a {
-      text-decoration: none;
-      color: #374151;
-      font-weight: 500;
-      transition: color 0.15s;
-    }
-    .nav-links a:hover {
-      color: #1e3a8a;
-    }
   </style>
 </head>
 <body class="bg-gradient-custom min-h-screen flex flex-col font-sans">
 
   <!-- Navbar -->
-  <nav class="bg-white/80 backdrop-blur-sm shadow-sm">
-    <div class="nav-container">
-      <a href="#" class="rounded-logo" aria-label="Urbor Logo">
-                     <img src="content/images/URBOR.png" alt="Urbor Logo" />
+  <nav class="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center py-4">
+      <!-- Logo -->
+      <a href="/" class="flex items-center" aria-label="Urbor Logo">
+        <img src="content/images/URBOR.png" alt="Urbor Logo" class="h-12" />
       </a>
-      <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/about.html" class="text-blue-700 font-medium">About</a></li>
-        <li><a href="/">projects</a></li>
-        <li><a href="/">Team</a></li>
-        <li><a href="/">Contact</a></li>
+
+      <!-- Desktop Links -->
+      <ul class="hidden md:flex gap-5 list-none">
+        <li><a href="/" class="text-gray-700 font-medium hover:text-primary transition">Home</a></li>
+        <li><a href="/about.html" class="text-primary font-medium">About</a></li>
+        <li><a href="/" class="text-gray-700 font-medium hover:text-primary transition">Projects</a></li>
+        <li><a href="/" class="text-gray-700 font-medium hover:text-primary transition">Team</a></li>
+        <li><a href="/" class="text-gray-700 font-medium hover:text-primary transition">Contact</a></li>
+        <li><a href="/" class="text-gray-700 font-medium hover:text-primary transition">Farmen</a></li> 
       </ul>
+
+      <!-- Mobile Hamburger -->
+      <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
     </div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <ul id="mobile-menu" class="hidden md:hidden flex flex-col gap-3 px-4 pb-4">
+      <li><a href="/" class="text-gray-700 font-medium hover:text-primary block py-1">Home</a></li>
+      <li><a href="/about.html" class="text-primary font-medium block py-1">About</a></li>
+      <li><a href="/" class="text-gray-700 font-medium hover:text-primary block py-1">Projects</a></li>
+      <li><a href="/" class="text-gray-700 font-medium hover:text-primary block py-1">Team</a></li>
+      <li><a href="/" class="text-gray-700 font-medium hover:text-primary block py-1">Contact</a></li>
+      <li><a href="/" class="text-gray-700 font-medium hover:text-primary block py-1">farmen</a></li>
+    </ul>
   </nav>
 
   <!-- Main Content -->
-  <main class="flex-grow px-6 py-12">
-    <!-- Reduced width: max-w-3xl for tighter, more professional appearance -->
+  <main class="flex-grow px-4 sm:px-6 py-12">
     <div class="max-w-3xl mx-auto w-full">
-      <div class="pure-glass w-full p-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">About Us</h1>
+      <div class="pure-glass w-full p-6 sm:p-8 rounded-xl">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">About Us</h1>
 
         <p class="text-gray-700 mb-6">
           Our objective is to channel cash flow from urban to rural areas to mitigate the cash flow shortage in rural regions, specifically in the agricultural sector. We aim to transform agriculture into an investable industry and make microfinancing risk-free for farmers.
@@ -95,17 +87,17 @@
           Our business aims to contribute to societal improvement by addressing critical issues in both the agricultural and financial sectors.
         </p>
 
-        <h2 class="text-xl font-semibold text-gray-800 mt-8 mb-3">For Farmers: Zero-Risk Scheme</h2>
+        <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mt-8 mb-3">For Farmers: Zero-Risk Scheme</h2>
         <p class="text-gray-700 mb-6">
           We make micro-financing completely risk-free through our <strong>“Zero-Risk Scheme”</strong>, based on a profit-sharing model and post-harvest repayment. This empowers farmers to access necessary financing for high-yield production without fear of financial loss—improving agricultural productivity and livelihoods.
         </p>
 
-        <h2 class="text-xl font-semibold text-gray-800 mt-8 mb-3">For Investors: Halal Investment Pool</h2>
+        <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mt-8 mb-3">For Investors: Halal Investment Pool</h2>
         <p class="text-gray-700 mb-6">
           We offer the <strong>“Halal Investment Pool”</strong>—a unique, Shariah-compliant investment product delivering inflation-beating returns. It serves as a stable alternative to volatile stock markets, underdeveloped bond markets, and low-yield bank deposits, meeting the demand for ethical and sustainable investing.
         </p>
 
-        <h2 class="text-xl font-semibold text-gray-800 mt-8 mb-3">Our Broader Impact</h2>
+        <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mt-8 mb-3">Our Broader Impact</h2>
         <p class="text-gray-700">
           Through community development initiatives, we reduce agricultural production costs—further boosting farmers’ income and fostering inclusive economic growth. By linking risk-free rural financing with ethical urban investment, we drive sustainable development that benefits both rural and urban communities.
         </p>
@@ -114,9 +106,29 @@
   </main>
 
   <!-- Footer -->
-  <footer class="px-6 py-6 text-center text-sm text-gray-600 border-t border-gray-200 bg-white/80">
+  <footer class="px-4 sm:px-6 py-6 text-center text-sm text-gray-600 border-t border-gray-200 bg-white/80">
     <p>&copy; 2025 Urbor. All rights reserved.</p>
   </footer>
 
+  <!-- Mobile Menu Toggle Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('mobile-menu-button');
+      const menu = document.getElementById('mobile-menu');
+
+      if (btn && menu) {
+        btn.addEventListener('click', () => {
+          menu.classList.toggle('hidden');
+        });
+
+        // Close menu when a link is clicked
+        menu.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            menu.classList.add('hidden');
+          });
+        });
+      }
+    });
+  </script>
 </body>
 </html>
