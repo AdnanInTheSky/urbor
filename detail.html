@@ -17,7 +17,7 @@
         }
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
-             background: linear-gradient(to bottom right, #0066cc, #90ee90);
+            background: linear-gradient(to bottom right, #0066cc, #90ee90);
             color: var(--text-primary);
             line-height: 1.6;
             padding: 2rem;
@@ -141,6 +141,11 @@
                     html += '<ul>\n';
                     while (i < lines.length && lines[i].trim().startsWith('- ')) {
                         let item = lines[i].trim().slice(2);
+                        // 🔥 CRITICAL FIX: Skip unwanted placeholder line
+                        if (item.trim().toLowerCase() === "fresh harvest cost") {
+                            i++;
+                            continue;
+                        }
                         item = item
                             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                             .replace(/\*(.*?)\*/g, '<em>$1</em>')
@@ -160,6 +165,10 @@
                         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                         .replace(/\*(.*?)\*/g, '<em>$1</em>')
                         .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+                    // Also prevent orphaned "Fresh harvest cost" in paragraphs
+                    if (para.toLowerCase().trim() === "fresh harvest cost") {
+                        continue;
+                    }
                     html += `<p>${escapeHtml(para)}</p>\n`;
                 } else {
                     i++;
@@ -181,7 +190,11 @@
             try {
                 const res = await fetch(`/content/projects/${filename}`);
                 if (!res.ok) throw new Error('Project not found');
-                const text = await res.text();
+                let text = await res.text();
+
+                // Optional: Apply global cleanup (in case it appears outside lists)
+                // This is redundant with list filter but safe
+                text = text.replace(/^\*\s*Fresh harvest cost\s*$/gim, '');
 
                 const match = text.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
                 const data = {};
@@ -224,7 +237,7 @@
 
                 container.innerHTML = `
                     <div class="project-detail">
-                        ${data.image ? `<img src="${data.image}" class="detail-image" alt="${escapeHtml(data.title || 'Project')}">` : ''}
+                        ${data.image ? `<img src="${escapeHtml(data.image)}" class="detail-image" alt="${escapeHtml(data.title || 'Project')}">` : ''}
                         <div class="detail-content">
                             <h1>${escapeHtml(data.title || 'Untitled Project')}</h1>
                             ${meta}
