@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urbor</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Config: Custom Colors -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0f4c5c',
+            secondary: '#e27d60',
+            accent: '#8a9b6c',
+            light: '#f4f9f6',
+            'text-dark': '#2d3e50',
+            'text-light': '#5a6b7c',
+            border: '#dde6e0'
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Custom Styles (minimal) -->
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: var(--text-dark);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    .background-gradient {
+      background: linear-gradient(to bottom right, #0066cc, #90ee90);
+      min-height: 100vh;
+      padding-top: 80px;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 76, 92, 0.65);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      padding: 0 1rem;
+    }
+    .section-header h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background-color: #8a9b6c;
+      border-radius: 2px;
+    }
+  </style>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="background-gradient">
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-sm py-4 px-6 z-50 shadow-sm">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <!-- Logo -->
+        <a href="#" class="flex items-center" aria-label="Urbor Logo">
+          <img src="content/images/URBOR.png" alt="Urbor Logo" class="h-12" />
+        </a>
+
+        <!-- Desktop Links -->
+        <ul class="hidden md:flex gap-6 list-none">
+          <li><a href="#home" class="text-text-light font-semibold hover:text-primary transition">Home</a></li>
+          <li><a href="about.html" class="text-text-light font-semibold hover:text-primary transition">About</a></li>
+          <li><a href="#projects" class="text-text-light font-semibold hover:text-primary transition">Projects</a></li>
+          <li><a href="#team" class="text-text-light font-semibold hover:text-primary transition">Team</a></li>
+          <li><a href="#contact" class="text-text-light font-semibold hover:text-primary transition">Contact</a></li>
+          <li><a href="#contact" class="text-text-light font-semibold hover:text-primary transition">Farmen</a></li>
+        </ul>
+
+        <!-- Mobile Hamburger -->
+        <button id="mobile-menu-button" class="md:hidden text-text-dark focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <ul id="mobile-menu" class="hidden md:hidden flex flex-col gap-4 mt-6 px-6 pb-4">
+        <li><a href="#home" class="text-text-light font-semibold hover:text-primary transition">Home</a></li>
+        <li><a href="about.html" class="text-text-light font-semibold hover:text-primary transition">About</a></li>
+        <li><a href="#projects" class="text-text-light font-semibold hover:text-primary transition">Projects</a></li>
+        <li><a href="#team" class="text-text-light font-semibold hover:text-primary transition">Team</a></li>
+        <li><a href="#contact" class="text-text-light font-semibold hover:text-primary transition">Contact</a></li>
+        <li><a href="#contact" class="text-text-light font-semibold hover:text-primary transition">Farmen</a></li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+      <!-- Hero -->
+      <div class="hero relative h-[60vh] sm:h-[70vh] flex items-center justify-center text-center text-white rounded-xl mb-16 overflow-hidden" id="home"
+        style="background: url('/content/images/Screenshot 2025-12-17 174132.png') center/cover no-repeat;">
+        <div class="hero-content">
+          <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
+            Shariah-compliant financing
+          </h1>
+          <p class="text-base sm:text-lg opacity-95 max-w-2xl mx-auto">
+            We empower underserved agricultural communities through sustainable financing and dynamic supports.
+          </p>
+        </div>
+      </div>
+
+      <!-- Mission -->
+      <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md mb-16 border-l-4 border-accent" id="about">
+        <h3 class="text-xl md:text-2xl font-bold text-primary mb-3">Our Mission</h3>
+        <p class="text-text-light">
+          We move <span class="text-secondary font-bold">urban capital</span> into agriculture, giving farmers zero-risk, profit-sharing finance and turning farming into a stable, investable industry.
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-16">
+        <div class="bg-white p-5 rounded-xl shadow text-center">
+          <span class="block text-2xl md:text-3xl font-extrabold text-primary">5+</span>
+          <div class="text-xs sm:text-sm text-text-light mt-1">UNO</div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow text-center">
+          <span class="block text-2xl md:text-3xl font-extrabold text-primary">50+</span>
+          <div class="text-xs sm:text-sm text-text-light mt-1">Farmers</div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow text-center">
+          <span class="block text-2xl md:text-3xl font-extrabold text-primary">1.5M+ tk</span>
+          <div class="text-xs sm:text-sm text-text-light mt-1">Financing</div>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow text-center">
+          <span class="block text-2xl md:text-3xl font-extrabold text-primary">90%</span>
+          <div class="text-xs sm:text-sm text-text-light mt-1">Success Rate</div>
+        </div>
+      </div>
+
+      <!-- Projects -->
+      <div class="text-center mb-10" id="projects">
+        <h2 class="relative inline-block text-xl md:text-2xl font-extrabold text-primary pb-2">Our Projects</h2>
+      </div>
+      <div id="projects-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        <div class="bg-white p-5 rounded-xl shadow text-center text-primary">Loading projects...</div>
+      </div>
+
+      <!-- Team -->
+      <div class="text-center mb-10" id="team">
+        <h2 class="relative inline-block text-xl md:text-2xl font-extrabold text-primary pb-2">Our Team</h2>
+      </div>
+      <div id="team-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        <div class="bg-white p-5 rounded-xl shadow text-center text-primary">Loading team members...</div>
+      </div>
+
+      <!-- Contact -->
+      <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md text-center mb-12" id="contact">
+        <h3 class="text-xl md:text-2xl font-bold text-primary mb-3">Join Our Mission</h3>
+        <a href="mailto:rawnakahasan1306@gmail.com"
+          class="inline-block bg-secondary text-white py-2 px-5 rounded-full font-semibold hover:bg-[#d56a4f] transition">
+          rawnakahasan1306@gmail.com
+        </a>
+      </div>
+
+      <!-- Footer -->
+      <footer class="text-center py-6 text-text-light text-sm border-t border-border">
+        <p>&copy; 2025 Urbor. All rights reserved.</p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Toggle Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('mobile-menu-button');
+      const menu = document.getElementById('mobile-menu');
+
+      if (btn && menu) {
+        btn.addEventListener('click', () => {
+          menu.classList.toggle('hidden');
+        });
+
+        // Close menu on link click
+        menu.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            menu.classList.add('hidden');
+          });
+        });
+      }
+    });
+  </script>
+
+  <!-- Project & Team Loader (Your Existing Code) -->
+  <script>
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.innerText = text;
+      return div.innerHTML;
+    }
+
+    function parseFrontmatter(md) {
+      const match = md.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
+      if (!match) return { data: {}, content: md };
+      const yaml = match[1];
+      const content = match[2];
+      const data = {};
+      yaml.split('\n').forEach(line => {
+        line = line.trim();
+        if (!line || line.startsWith('#')) return;
+        const i = line.indexOf(':');
+        if (i <= 0) return;
+        let key = line.slice(0, i).trim();
+        let value = line.slice(i + 1).trim();
+        if ((value.startsWith('"') && value.endsWith('"')) ||
+            (value.startsWith("'") && value.endsWith("'"))) {
+          value = value.slice(1, -1);
+        }
+        if (value === 'true') value = true;
+        else if (value === 'false') value = false;
+        else if (!isNaN(value) && value !== '') value = Number(value);
+        else if (value.startsWith('[') && value.endsWith(']')) {
+          try {
+            value = JSON.parse(value.replace(/'/g, '"'));
+          } catch (e) {
+            value = [];
+          }
+        }
+        data[key] = value;
+      });
+      return { data, content };
+    }
+
+    function getFirstParagraph(markdownBody) {
+      let clean = markdownBody.replace(/^---[\s\S]*?---\s*/, '');
+      const paragraphs = clean.trim().split(/\n\s*\n/);
+      for (let p of paragraphs) {
+        p = p.trim();
+        if (p && !p.startsWith('#') && !p.startsWith('- ') && !p.startsWith('> ')) {
+          return p
+            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+            .replace(/\*\*(.*?)\*\*/g, '$1')
+            .replace(/\*(.*?)\*/g, '$1')
+            .replace(/_/g, ' ')
+            .replace(/\s+/g, ' ');
+        }
+      }
+      return "No description available.";
+    }
+
+    function renderTag(tag) {
+      return `<span class="inline-block bg-accent/15 text-accent text-xs font-semibold px-2 py-0.5 rounded-full mr-1">${escapeHtml(tag)}</span>`;
+    }
+
+    async function loadProjects() {
+      const container = document.getElementById('projects-container');
+      try {
+        const res = await fetch('/content/projects/manifest.json');
+        if (!res.ok) throw new Error('manifest.json not found');
+        const manifest = await res.json();
+        if (!Array.isArray(manifest) || manifest.length === 0) {
+          container.innerHTML = '<div class="bg-white p-6 rounded-xl text-center text-red-600 col-span-full">No projects to display.</div>';
+          return;
+        }
+
+        let html = '';
+        for (const file of manifest) {
+          const fileRes = await fetch(`/content/projects/${file}`);
+          if (!fileRes.ok) continue;
+          const text = await fileRes.text();
+          const { data, content } = parseFrontmatter(text);
+
+          const dateStr = data.date ? new Date(data.date).toLocaleDateString() : '';
+          const summary = getFirstParagraph(content);
+          const tags = Array.isArray(data.tags) ? data.tags.map(renderTag).join('') : '';
+          const imgHtml = data.image ?
+            `<div class="h-40 overflow-hidden rounded-t-xl"><img src="${data.image}" class="w-full h-full object-cover" alt="${escapeHtml(data.title || 'Project')}"></div>` :
+            `<div class="h-40 bg-light rounded-t-xl"></div>`;
+
+          html += `
+            <div class="bg-white rounded-xl shadow hover:shadow-md transition-shadow flex flex-col h-full">
+              ${imgHtml}
+              <div class="p-4 flex flex-col flex-grow">
+                <h2 class="text-base font-bold text-primary mb-1">${escapeHtml(data.title || 'Untitled Project')}</h2>
+                ${dateStr ? `<div class="text-xs text-text-light mb-1">${dateStr}</div>` : ''}
+                ${tags ? `<div class="flex flex-wrap mb-2">${tags}</div>` : ''}
+                <p class="text-sm text-text-light mb-3 flex-grow">${escapeHtml(summary)}</p>
+                <a href="detail.html?id=${encodeURIComponent(file)}" class="inline-block w-fit bg-secondary text-white text-xs font-semibold py-1.5 px-3 rounded-full hover:bg-[#d56a4f] transition">
+                  Read More
+                </a>
+              </div>
+            </div>
+          `;
+        }
+        container.innerHTML = html;
+      } catch (err) {
+        container.innerHTML = `<div class="bg-white p-6 rounded-xl text-center text-red-600 col-span-full">Failed to load projects.<br>${err.message}</div>`;
+      }
+    }
+
+    async function loadTeam() {
+      const container = document.getElementById('team-container');
+      try {
+        const res = await fetch('/content/teams/manifest.json');
+        if (!res.ok) throw new Error('manifest.json not found');
+        const manifest = await res.json();
+        if (!Array.isArray(manifest) || manifest.length === 0) {
+          container.innerHTML = '<div class="bg-white p-6 rounded-xl text-center text-red-600 col-span-full">No team members to display.</div>';
+          return;
+        }
+
+        let html = '';
+        for (const file of manifest) {
+          const fileRes = await fetch(`/content/teams/${file}`);
+          if (!fileRes.ok) continue;
+          const text = await fileRes.text();
+          const { data, content } = parseFrontmatter(text);
+
+          const bio = content
+            .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-secondary">$1</a>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/\n/g, '<br>');
+
+          const imgHtml = data.image ?
+            `<div class="w-24 h-24 rounded-full overflow-hidden border-2 border-light shadow mx-auto mb-3"><img src="${data.image}" class="w-full h-full object-cover" onerror="this.style.display='none'"></div>` :
+            '';
+
+          html += `
+            <div class="bg-white rounded-xl p-5 text-center hover:shadow-md transition-shadow">
+              ${imgHtml}
+              <h3 class="text-base font-bold">${escapeHtml(data.title || 'Team Member')}</h3>
+              <p class="text-accent font-semibold text-sm mb-2">${escapeHtml(data.role || 'Role')}</p>
+              <div class="text-text-light text-xs leading-relaxed">${bio}</div>
+            </div>
+          `;
+        }
+        container.innerHTML = html;
+      } catch (err) {
+        container.innerHTML = `<div class="bg-white p-6 rounded-xl text-center text-red-600 col-span-full">Failed to load team.<br>${err.message}</div>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadProjects();
+      loadTeam();
+    });
+  </script>
+</body>
+</html>
