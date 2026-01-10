@@ -17,10 +17,10 @@
       theme: {
         extend: {
           colors: {
-            primary: '#0f4c5c',
-            secondary: '#e27d60',
-            accent: '#8a9b6c',
-            light: '#f4f9f6',
+            primary: '#09514C', // Deep Teal
+            secondary: '#11A49E', // Tropical Teal
+            accent: '#3D9E71', // Jade Green
+            light: '#5D9951', // Moss Green
             'text-dark': '#2d3e50',
             'text-light': '#5a6b7c',
             border: '#dde6e0'
@@ -91,7 +91,7 @@
       text-align: center;
       border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 20px 40px rgba(15, 76, 92, 0.3);
+      box-shadow: 0 20px 40px rgba(9, 81, 76, 0.3);
       margin-bottom: 80px;
     }
     
@@ -119,7 +119,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to bottom right, rgba(15, 76, 92, 0.85), rgba(15, 76, 92, 0.7));
+      background: linear-gradient(to bottom right, rgba(9, 81, 76, 0.85), rgba(9, 81, 76, 0.7));
       z-index: 1;
     }
     
@@ -143,7 +143,7 @@
       transform: translateX(-50%);
       width: 80px;
       height: 4px;
-      background: linear-gradient(to right, #8a9b6c, #e27d60);
+      background: linear-gradient(to right, #3D9E71, #11A49E);
       border-radius: 4px;
     }
     
@@ -165,12 +165,12 @@
     
     .stat-card:hover {
       transform: translateY(-8px);
-      border-top-color: #8a9b6c;
+      border-top-color: #3D9E71;
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     }
     
     .mission-card {
-      background: linear-gradient(to right, white 96%, #8a9b6c 4%);
+      background: linear-gradient(to right, white 96%, #3D9E71 4%);
       transition: all 0.3s ease;
     }
     
@@ -208,7 +208,7 @@
       left: 0;
       width: 0;
       height: 2px;
-      background-color: #e27d60;
+      background-color: #11A49E;
       transition: width 0.3s ease;
     }
     
@@ -217,7 +217,7 @@
     }
     
     .btn-primary {
-      background: linear-gradient(to right, #e27d60, #d56a4f);
+      background: linear-gradient(to right, #11A49E, #09514C);
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
@@ -225,7 +225,7 @@
     
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(226, 125, 96, 0.3);
+      box-shadow: 0 10px 20px rgba(17, 164, 158, 0.3);
     }
     
     .btn-primary:active {
@@ -263,7 +263,7 @@
     
     .team-summary {
       background: linear-gradient(135deg, #f4f9f6 0%, #ffffff 100%);
-      border-left: 5px solid #e27d60;
+      border-left: 5px solid #11A49E;
       transition: all 0.3s ease;
     }
     
@@ -279,7 +279,7 @@
     
     .contact-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(15, 76, 92, 0.15);
+      box-shadow: 0 20px 40px rgba(9, 81, 76, 0.15);
     }
     
     .footer-link {
@@ -289,7 +289,7 @@
     
     .footer-link:hover {
       transform: translateX(5px);
-      color: #e27d60;
+      color: #11A49E;
     }
     
     /* Loading animation for projects */
@@ -312,7 +312,7 @@
       left: 0;
       width: 0%;
       height: 4px;
-      background: linear-gradient(to right, #8a9b6c, #e27d60);
+      background: linear-gradient(to right, #3D9E71, #11A49E);
       z-index: 100;
       transition: width 0.1s ease;
     }
@@ -450,17 +450,40 @@
   </div>
 </div>
 
-      <!-- Projects -->
+      <!-- Image Gallery Section -->
       <div class="section-header text-center mb-8 sm:mb-12" id="projects">
-        <h2 class="relative inline-block text-xl sm:text-2xl md:text-3xl font-extrabold text-primary pb-2">Our Projects</h2>
-        <p class="text-text-light max-w-2xl mx-auto mt-4 sm:mt-6 text-sm sm:text-base md:text-lg">Discover how we're transforming agricultural communities through ethical financing and sustainable partnerships.</p>
+        <h2 class="relative inline-block text-xl sm:text-2xl md:text-3xl font-extrabold text-primary pb-2">Our Work in Action</h2>
+        <p class="text-text-light max-w-2xl mx-auto mt-4 sm:mt-6 text-sm sm:text-base md:text-lg">See how our ethical financing is transforming agricultural communities across Bangladesh.</p>
       </div>
-      <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-20">
-        <div class="project-card bg-white p-4 sm:p-6 rounded-2xl shadow-lg text-center text-primary">
-          <div class="flex flex-col items-center justify-center h-48 sm:h-64">
-            <div class="loading-dots mb-3 sm:mb-4 text-lg sm:text-2xl font-bold">Loading projects</div>
-            <div class="w-10 h-10 sm:w-12 sm:h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-          </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-20">
+        <!-- Image 1 -->
+        <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
+            <img src="content/images/1-Maize-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+        </div>
+        
+        <!-- Image 2 -->
+        <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
+            <img src="content/images/2-Mixed-Vegetable-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+        </div>
+        
+        <!-- Image 3 -->
+        <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
+            <img src="content/images/3-Cattle-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+        </div>
+        
+        <!-- Image 4 -->
+        <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
+            <img src="content/images/4-Duck-(Meat)-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+        </div>
+        
+        <!-- Image 5 -->
+        <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
+            <img src="content/images/5-Faomi-Chicken-(Egg)-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+        </div>
+        
+        <!-- Image 6 -->
+        <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
+            <img src="content/images/6-Goat-Project---1.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
         </div>
       </div>
 
@@ -602,152 +625,4 @@
     });
   </script>
 
-  <!-- Project Loader with Inline Expand (UNCHANGED LOGIC) -->
-  <script>
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.innerText = text;
-      return div.innerHTML;
-    }
-
-    function parseFrontmatter(md) {
-      const match = md.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
-      if (!match) return { data: {}, content: md };
-      const yaml = match[1];
-      const content = match[2];
-      const data = {};
-      yaml.split('\n').forEach(line => {
-        line = line.trim();
-        if (!line || line.startsWith('#')) return;
-        const i = line.indexOf(':');
-        if (i <= 0) return;
-        let key = line.slice(0, i).trim();
-        let value = line.slice(i + 1).trim();
-        if ((value.startsWith('"') && value.endsWith('"')) ||
-            (value.startsWith("'") && value.endsWith("'"))) {
-          value = value.slice(1, -1);
-        }
-        if (value === 'true') value = true;
-        else if (value === 'false') value = false;
-        else if (!isNaN(value) && value !== '') value = Number(value);
-        else if (value.startsWith('[') && value.endsWith(']')) {
-          try {
-            value = JSON.parse(value.replace(/'/g, '"'));
-          } catch (e) {
-            value = [];
-          }
-        }
-        data[key] = value;
-      });
-      return { data, content };
-    }
-
-    function getFirstParagraph(markdownBody) {
-      let clean = markdownBody.replace(/^---[\s\S]*?---\s*/, '');
-      const paragraphs = clean.trim().split(/\n\s*\n/);
-      for (let p of paragraphs) {
-        p = p.trim();
-        if (p && !p.startsWith('#') && !p.startsWith('- ') && !p.startsWith('> ')) {
-          return p
-            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-            .replace(/\*\*(.*?)\*\*/g, '$1')
-            .replace(/\*(.*?)\*/g, '$1')
-            .replace(/_/g, ' ')
-            .replace(/\s+/g, ' ');
-        }
-      }
-      return "No description available.";
-    }
-
-    function fullRenderedContent(content) {
-      return content
-        .replace(/^---[\s\S]*?---\s*/, '')
-        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-secondary hover:underline">$1</a>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/\n/g, '<br>');
-    }
-
-    function renderTag(tag) {
-      return `<span class="inline-block bg-accent/15 text-accent text-xs font-semibold px-2 sm:px-3 py-1 rounded-full mr-1 sm:mr-2 mb-1 sm:mb-2">${escapeHtml(tag)}</span>`;
-    }
-
-    async function loadProjects() {
-      const container = document.getElementById('projects-container');
-      try {
-        const res = await fetch('/content/projects/manifest.json');
-        if (!res.ok) throw new Error('manifest.json not found');
-        const manifest = await res.json();
-        if (!Array.isArray(manifest) || manifest.length === 0) {
-          container.innerHTML = '<div class="bg-white p-6 sm:p-8 rounded-2xl text-center text-red-600 col-span-full shadow-lg">No projects to display.</div>';
-          return;
-        }
-
-        let html = '';
-        for (const file of manifest) {
-          const fileRes = await fetch(`/content/projects/${file}`);
-          if (!fileRes.ok) continue;
-          const text = await fileRes.text();
-          const { data, content } = parseFrontmatter(text);
-
-          const dateStr = data.date ? new Date(data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
-          const summary = getFirstParagraph(content);
-          const fullContent = fullRenderedContent(content);
-          const tags = Array.isArray(data.tags) ? data.tags.map(renderTag).join('') : '';
-          const imgHtml = data.image ?
-            `<div class="h-40 sm:h-48 md:h-56 w-full overflow-hidden rounded-t-2xl"><img src="${data.image}" class="w-full h-full object-cover transition-transform duration-500" alt="${escapeHtml(data.title || 'Project')}"></div>` :
-            `<div class="h-40 sm:h-48 md:h-56 w-full bg-gradient-to-br from-light to-primary/10 rounded-t-2xl flex items-center justify-center"><i class="fas fa-seedling text-primary/30 text-4xl sm:text-5xl"></i></div>`;
-
-          html += `
-            <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden w-full h-full flex flex-col">
-              ${imgHtml}
-              <div class="p-4 sm:p-6 flex flex-col flex-grow">
-                <div class="flex-grow">
-                  <h2 class="text-lg sm:text-xl font-bold text-primary mb-2 sm:mb-3 line-clamp-2">${escapeHtml(data.title || 'Untitled Project')}</h2>
-                  ${dateStr ? `<div class="flex items-center text-xs sm:text-sm text-text-light mb-2 sm:mb-3"><i class="far fa-calendar mr-1 sm:mr-2 text-xs"></i>${dateStr}</div>` : ''}
-                  ${tags ? `<div class="flex flex-wrap gap-1 mb-3 sm:mb-4">${tags}</div>` : ''}
-                  <p class="text-text-light text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-3">${escapeHtml(summary)}</p>
-                </div>
-                <div class="expanded-content mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-border/50 text-text-light text-xs sm:text-sm leading-relaxed">${fullContent}</div>
-              </div>
-            </div>
-          `;
-        }
-        container.innerHTML = html;
-
-        container.querySelectorAll('.read-more-btn').forEach(btn => {
-          btn.addEventListener('click', function () {
-            const expanded = this.nextElementSibling;
-            const isExpanded = expanded.classList.contains('show');
-
-            // Close all
-            document.querySelectorAll('.expanded-content').forEach(el => el.classList.remove('show'));
-            document.querySelectorAll('.read-more-btn').forEach(b => {
-              b.textContent = 'Read More';
-              b.innerHTML = 'Read More <i class="fas fa-chevron-down ml-1 sm:ml-2 text-xs"></i>';
-            });
-
-            if (!isExpanded) {
-              expanded.classList.add('show');
-              this.innerHTML = 'Show Less <i class="fas fa-chevron-up ml-1 sm:ml-2 text-xs"></i>';
-              
-              // Scroll to expanded content if it's out of view
-              expanded.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-          });
-        });
-      } catch (err) {
-        container.innerHTML = `<div class="bg-white p-6 sm:p-8 rounded-2xl text-center text-red-600 col-span-full shadow-lg">
-          <i class="fas fa-exclamation-triangle text-2xl sm:text-3xl mb-3 sm:mb-4"></i>
-          <h3 class="font-bold text-base sm:text-lg mb-1 sm:mb-2">Failed to load projects</h3>
-          <p class="text-xs sm:text-sm">${err.message}</p>
-        </div>`;
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      loadProjects();
-    });
-  </script>
-</body>
-</html>
+  

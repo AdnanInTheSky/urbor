@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Urbor</title>
+  <title>Urbor - Shariah-Compliant Agricultural Financing</title>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Tailwind Config: Custom Colors -->
   <script>
@@ -14,33 +17,101 @@
       theme: {
         extend: {
           colors: {
-            primary: '#0f4c5c',
-            secondary: '#e27d60',
-            accent: '#8a9b6c',
-            light: '#f4f9f6',
+            primary: '#09514C', // Deep Teal
+            secondary: '#11A49E', // Tropical Teal
+            accent: '#3D9E71', // Jade Green
+            light: '#5D9951', // Moss Green
             'text-dark': '#2d3e50',
             'text-light': '#5a6b7c',
             border: '#dde6e0'
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.8s ease-out',
+            'slide-up': 'slideUp 0.6s ease-out',
+            'float': 'float 3s ease-in-out infinite',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(20px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
           }
         }
       }
     };
   </script>
 
-  <!-- Custom Styles (minimal) -->
+  <!-- Custom Styles -->
   <style>
-    html { scroll-behavior: smooth; }
+    html { 
+      scroll-behavior: smooth; 
+      scroll-padding-top: 80px;
+    }
+    
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       color: var(--text-dark);
       line-height: 1.7;
       overflow-x: hidden;
     }
+    
     .background-gradient {
-      background: linear-gradient(to bottom right, #0066cc, #90ee90);
+      background: linear-gradient(135deg, #0066cc 0%, #90ee90 100%);
       min-height: 100vh;
       padding-top: 80px;
+      position: relative;
     }
+    
+    .background-gradient::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      z-index: 0;
+    }
+    
+    .hero {
+      position: relative;
+      height: 70vh;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(9, 81, 76, 0.3);
+      margin-bottom: 80px;
+    }
+    
+    @media (max-width: 768px) {
+      .hero {
+        height: 60vh;
+        min-height: 400px;
+        margin-bottom: 60px;
+        border-radius: 16px;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .hero {
+        height: 50vh;
+        min-height: 350px;
+        margin-bottom: 40px;
+      }
+    }
+    
     .hero::before {
       content: '';
       position: absolute;
@@ -48,322 +119,510 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(15, 76, 92, 0.65);
+      background: linear-gradient(to bottom right, rgba(9, 81, 76, 0.85), rgba(9, 81, 76, 0.7));
       z-index: 1;
     }
+    
     .hero-content {
       position: relative;
       z-index: 2;
-      max-width: 800px;
-      padding: 0 1rem;
+      max-width: 900px;
+      padding: 0 2rem;
     }
+    
+    .section-header {
+      position: relative;
+      margin-bottom: 3rem;
+    }
+    
     .section-header h2::after {
       content: '';
       position: absolute;
-      bottom: 0;
+      bottom: -12px;
       left: 50%;
       transform: translateX(-50%);
-      width: 60px;
+      width: 80px;
       height: 4px;
-      background-color: #8a9b6c;
-      border-radius: 2px;
+      background: linear-gradient(to right, #3D9E71, #11A49E);
+      border-radius: 4px;
+    }
+    
+    .expanded-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .expanded-content.show {
+      max-height: 800px;
+      transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .stat-card {
+      transition: all 0.3s ease;
+      border-top: 4px solid transparent;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-8px);
+      border-top-color: #3D9E71;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .mission-card {
+      background: linear-gradient(to right, white 96%, #3D9E71 4%);
+      transition: all 0.3s ease;
+    }
+    
+    .mission-card:hover {
+      transform: translateX(5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .project-card {
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+    
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .project-card img {
+      transition: transform 0.5s ease;
+    }
+    
+    .project-card:hover img {
+      transform: scale(1.05);
+    }
+    
+    .nav-link {
+      position: relative;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: #11A49E;
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(to right, #11A49E, #09514C);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(17, 164, 158, 0.3);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+    
+    .btn-primary:focus:not(:active)::after {
+      animation: ripple 1s ease-out;
+    }
+    
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(20, 20);
+        opacity: 0;
+      }
+    }
+    
+    .team-summary {
+      background: linear-gradient(135deg, #f4f9f6 0%, #ffffff 100%);
+      border-left: 5px solid #11A49E;
+      transition: all 0.3s ease;
+    }
+    
+    .team-summary:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .contact-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f9fdfa 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(9, 81, 76, 0.15);
+    }
+    
+    .footer-link {
+      transition: all 0.2s ease;
+      display: inline-block;
+    }
+    
+    .footer-link:hover {
+      transform: translateX(5px);
+      color: #11A49E;
+    }
+    
+    /* Loading animation for projects */
+    .loading-dots:after {
+      content: '.';
+      animation: dots 1.5s steps(5, end) infinite;
+    }
+    
+    @keyframes dots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60% { content: '...'; }
+      80%, 100% { content: ''; }
+    }
+    
+    /* Scroll progress indicator */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 4px;
+      background: linear-gradient(to right, #3D9E71, #11A49E);
+      z-index: 100;
+      transition: width 0.1s ease;
+    }
+    
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+      .section-header h2 {
+        font-size: 1.75rem;
+      }
+      
+      .mission-card {
+        padding: 1.5rem;
+      }
+      
+      .stat-card {
+        padding: 1.5rem;
+      }
+      
+      .contact-card {
+        padding: 2rem 1.5rem;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .stat-card span {
+        font-size: 2rem;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
     }
   </style>
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+  
   <div class="background-gradient">
     <!-- Navbar -->
-    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-sm py-4 px-6 z-50 shadow-sm">
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md py-4 px-4 sm:px-6 z-50 shadow-lg border-b border-border/50">
       <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <!-- Logo -->
-        <a href="#" class="flex items-center" aria-label="Urbor Logo">
-          <img src="content/images/URBOR.png" alt="Urbor Logo" class="h-12" />
+        <a href="#" class="flex items-center group" aria-label="Urbor Logo">
+          <img src="content/images/URBOR.png" alt="Urbor Logo" class="h-10 sm:h-12 transition-transform duration-300 group-hover:scale-105" />
+          
         </a>
-
-        <!-- Desktop Links -->
-        <ul class="hidden md:flex gap-6 list-none">
-          <li><a href="#home" class="text-text-light font-semibold hover:text-primary transition">Home</a></li>
-          <li><a href="about.html" class="text-text-light font-semibold hover:text-primary transition">About</a></li>
-          <li><a href="#projects" class="text-text-light font-semibold hover:text-primary transition">Projects</a></li>
-          <li><a href="#team" class="text-text-light font-semibold hover:text-primary transition">Team</a></li>
-          <li><a href="#contact" class="text-text-light font-semibold hover:text-primary transition">Contact</a></li>
-          <li><a href="#contact" class="text-text-light font-semibold hover:text-primary transition">Farmen</a></li>
+        <ul class="hidden md:flex gap-6 lg:gap-8 list-none">
+          <li><a href="#home" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">Home</a></li>
+          <li><a href="about.html" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">About</a></li>
+          <li><a href="#projects" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">Projects</a></li>
+          <li><a href="#team" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">Team</a></li>
+          <li><a href="#contact" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">Contact</a></li>
+          <li><a href="https://www.farman.pro" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">Farman</a></li>
         </ul>
-
-        <!-- Mobile Hamburger -->
-        <button id="mobile-menu-button" class="md:hidden text-text-dark focus:outline-none">
+        <button id="mobile-menu-button" class="md:hidden text-text-dark focus:outline-none p-2 rounded-lg hover:bg-light transition duration-300">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
       </div>
-
-      <!-- Mobile Menu -->
-      <ul id="mobile-menu" class="hidden md:hidden flex flex-col gap-4 mt-6 px-6 pb-4">
-        <li><a href="#home" class="text-text-light font-semibold hover:text-primary transition">Home</a></li>
-        <li><a href="about.html" class="text-text-light font-semibold hover:text-primary transition">About</a></li>
-        <li><a href="#projects" class="text-text-light font-semibold hover:text-primary transition">Projects</a></li>
-        <li><a href="#team" class="text-text-light font-semibold hover:text-primary transition">Team</a></li>
-        <li><a href="#contact" class="text-text-light font-semibold hover:text-primary transition">Contact</a></li>
-        <li><a href="#contact" class="text-text-light font-semibold hover:text-primary transition">Farmen</a></li>
+      <ul id="mobile-menu" class="hidden md:hidden flex flex-col gap-2 mt-4 px-4 pb-4 bg-white rounded-xl shadow-lg animate-slide-up">
+        <li><a href="#home" class="nav-link block py-3 px-4 text-text-light font-semibold hover:text-primary hover:bg-light rounded-lg transition duration-300">Home</a></li>
+        <li><a href="about.html" class="nav-link block py-3 px-4 text-text-light font-semibold hover:text-primary hover:bg-light rounded-lg transition duration-300">About</a></li>
+        <li><a href="#projects" class="nav-link block py-3 px-4 text-text-light font-semibold hover:text-primary hover:bg-light rounded-lg transition duration-300">Projects</a></li>
+        <li><a href="#team" class="nav-link block py-3 px-4 text-text-light font-semibold hover:text-primary hover:bg-light rounded-lg transition duration-300">Team</a></li>
+        <li><a href="#contact" class="nav-link block py-3 px-4 text-text-light font-semibold hover:text-primary hover:bg-light rounded-lg transition duration-300">Contact</a></li>
+        <li><a href="https://www.farman.pro" class="nav-link block py-3 px-4 text-text-light font-semibold hover:text-primary hover:bg-light rounded-lg transition duration-300">Farman</a></li>
       </ul>
     </nav>
 
     <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-20 relative z-10">
       <!-- Hero -->
-      <div class="hero relative h-[60vh] sm:h-[70vh] flex items-center justify-center text-center text-white rounded-xl mb-16 overflow-hidden" id="home"
+      <div class="hero animate-fade-in" id="home"
         style="background: url('/content/images/Screenshot 2025-12-17 174132.png') center/cover no-repeat;">
         <div class="hero-content">
-          <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
-            Shariah-compliant financing
+ 
+          <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold mb-4 sm:mb-6 leading-tight text-white drop-shadow-lg">
+            Empowering Agriculture<br>Through <span class="text-secondary">Ethical Finance</span>
           </h1>
-          <p class="text-base sm:text-lg opacity-95 max-w-2xl mx-auto">
-            We empower underserved agricultural communities through sustainable financing and dynamic supports.
+          <p class="text-sm sm:text-base md:text-lg lg:text-xl opacity-95 max-w-3xl mx-auto text-white/95 leading-relaxed px-2 sm:px-0">
+            We bridge urban capital with agricultural communities through sustainable, zero-risk, profit-sharing financing solutions.
           </p>
+          <div class="mt-6 sm:mt-10">
+            <a href="#projects" class="btn-primary inline-flex items-center text-white py-2.5 sm:py-3 px-6 sm:px-8 rounded-full font-semibold text-sm sm:text-base md:text-lg">
+              Explore Our Projects
+              <i class="fas fa-arrow-right ml-2 sm:ml-3 transition-transform duration-300 group-hover:translate-x-2"></i>
+            </a>
+          </div>
         </div>
       </div>
 
       <!-- Mission -->
-      <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md mb-16 border-l-4 border-accent" id="about">
-        <h3 class="text-xl md:text-2xl font-bold text-primary mb-3">Our Mission</h3>
-        <p class="text-text-light">
-          We move <span class="text-secondary font-bold">urban capital</span> into agriculture, giving farmers zero-risk, profit-sharing finance and turning farming into a stable, investable industry.
-        </p>
-      </div>
-
-      <!-- Stats -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-16">
-        <div class="bg-white p-5 rounded-xl shadow text-center">
-          <span class="block text-2xl md:text-3xl font-extrabold text-primary">5+</span>
-          <div class="text-xs sm:text-sm text-text-light mt-1">UNO</div>
-        </div>
-        <div class="bg-white p-5 rounded-xl shadow text-center">
-          <span class="block text-2xl md:text-3xl font-extrabold text-primary">50+</span>
-          <div class="text-xs sm:text-sm text-text-light mt-1">Farmers</div>
-        </div>
-        <div class="bg-white p-5 rounded-xl shadow text-center">
-          <span class="block text-2xl md:text-3xl font-extrabold text-primary">1.5M+ tk</span>
-          <div class="text-xs sm:text-sm text-text-light mt-1">Financing</div>
-        </div>
-        <div class="bg-white p-5 rounded-xl shadow text-center">
-          <span class="block text-2xl md:text-3xl font-extrabold text-primary">90%</span>
-          <div class="text-xs sm:text-sm text-text-light mt-1">Success Rate</div>
+      <div class="mission-card p-6 sm:p-8 rounded-2xl shadow-xl mb-12 sm:mb-20 animate-slide-up" id="about">
+        <div class="flex flex-col sm:flex-row items-start">
+          <div class="bg-primary/10 p-3 sm:p-4 rounded-xl mb-4 sm:mb-0 sm:mr-6 flex-shrink-0">
+            <i class="fas fa-bullseye text-primary text-xl sm:text-2xl"></i>
+          </div>
+          <div>
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-primary mb-3 sm:mb-4">Our Mission</h3>
+            <p class="text-text-light text-base sm:text-lg leading-relaxed">
+              We strategically move <span class="text-secondary font-bold">urban capital</span> into agriculture, providing farmers with zero-risk, profit-sharing finance and transforming farming into a stable, investable industry for sustainable community growth.
+            </p>
+          </div>
         </div>
       </div>
 
-      <!-- Projects -->
-      <div class="text-center mb-10" id="projects">
-        <h2 class="relative inline-block text-xl md:text-2xl font-extrabold text-primary pb-2">Our Projects</h2>
+<!-- Stats -->
+<div class="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12 sm:mb-20 mx-auto max-w-5xl">
+  <!-- Stat cards unchanged -->
+  <div class="stat-card bg-white p-4 sm:p-6 rounded-2xl shadow-lg text-center">
+    <div class="bg-primary/10 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+      <i class="fas fa-handshake text-primary text-lg sm:text-2xl"></i>
+    </div>
+    <span class="block text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary mb-1 sm:mb-2">10+</span>
+    <div class="text-xs sm:text-sm text-text-light font-medium">Members</div>
+  </div>
+  <div class="stat-card bg-white p-4 sm:p-6 rounded-2xl shadow-lg text-center">
+    <div class="bg-primary/10 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+      <i class="fas fa-tractor text-primary text-lg sm:text-2xl"></i>
+    </div>
+    <span class="block text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary mb-1 sm:mb-2">10+</span>
+    <div class="text-xs sm:text-sm text-text-light font-medium">Farmers Empowered</div>
+  </div>
+  <div class="stat-card bg-white p-4 sm:p-6 rounded-2xl shadow-lg text-center">
+    <div class="bg-primary/10 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+      <i class="fas fa-money-bill-wave text-primary text-lg sm:text-2xl"></i>
+    </div>
+    <span class="block text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary mb-1 sm:mb-2">1.5M+</span>
+    <div class="text-xs sm:text-sm text-text-light font-medium">Taka Financing</div>
+  </div>
+</div>
+
+      <!-- Image Gallery Section -->
+      <div class="section-header text-center mb-8 sm:mb-12" id="projects">
+        <h2 class="relative inline-block text-xl sm:text-2xl md:text-3xl font-extrabold text-primary pb-2">Our Work in Action</h2>
+        <p class="text-text-light max-w-2xl mx-auto mt-4 sm:mt-6 text-sm sm:text-base md:text-lg">See how our ethical financing is transforming agricultural communities across Bangladesh.</p>
       </div>
-      <div id="projects-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-        <div class="bg-white p-5 rounded-xl shadow text-center text-primary">Loading projects...</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-20">
+        <!-- Image 1 -->
+        <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
+            <img src="content/images/1-Maize-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+        </div>
+        
+        <!-- Image 2 -->
+        <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
+            <img src="content/images/1-Maize-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+        </div>
+        
+        <!-- Image 3 -->
+        <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
+            <img src="content/images/1-Maize-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+        </div>
+        
+        <!-- Image 4 -->
+        <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
+            <img src="content/images/1-Maize-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+        </div>
+        
+        <!-- Image 5 -->
+        <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
+            <img src="content/images/1-Maize-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+        </div>
+        
+        <!-- Image 6 -->
+        <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
+            <img src="content/images/1-Maize-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+        </div>
       </div>
 
-      <!-- Team -->
-      <div class="text-center mb-10" id="team">
-        <h2 class="relative inline-block text-xl md:text-2xl font-extrabold text-primary pb-2">Our Team</h2>
+      <!-- Team Summary Only -->
+      <div class="section-header text-center mb-8 sm:mb-12" id="team">
+        <h2 class="relative inline-block text-xl sm:text-2xl md:text-3xl font-extrabold text-primary pb-2">Our Team</h2>
+        <p class="text-text-light max-w-2xl mx-auto mt-4 sm:mt-6 text-sm sm:text-base md:text-lg">Dedicated professionals committed to ethical finance and agricultural transformation.</p>
       </div>
-      <div id="team-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-        <div class="bg-white p-5 rounded-xl shadow text-center text-primary">Loading team members...</div>
+      <div class="team-summary p-6 sm:p-8 rounded-2xl shadow-lg text-center mb-12 sm:mb-20">
+        <div class="flex flex-col md:flex-row items-center justify-center">
+          <div class="mb-4 sm:mb-6 md:mb-0 md:mr-6 lg:mr-8">
+            <div class="relative inline-block">
+              <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center text-white text-xl sm:text-3xl font-bold">
+                11
+              </div>
+              <div class="absolute -bottom-2 -right-2 bg-secondary text-white text-xs font-bold py-1 px-2 sm:px-3 rounded-full">
+                TEAM
+              </div>
+            </div>
+          </div>
+          <div class="text-center md:text-left">
+            <h3 class="text-lg sm:text-xl font-bold text-primary mb-2">Experienced & Diverse Team</h3>
+            <p class="text-text-light text-sm sm:text-base">Our team of <strong class="text-primary">11 dedicated members</strong> brings together expertise in finance, agriculture, community development, and Shariah compliance to drive meaningful change in agricultural communities.</p>
+          </div>
+        </div>
       </div>
 
       <!-- Contact -->
-      <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md text-center mb-12" id="contact">
-        <h3 class="text-xl md:text-2xl font-bold text-primary mb-3">Join Our Mission</h3>
-        <a href="mailto:rawnakahasan1306@gmail.com"
-          class="inline-block bg-secondary text-white py-2 px-5 rounded-full font-semibold hover:bg-[#d56a4f] transition">
-          rawnakahasan1306@gmail.com
-        </a>
+      <div class="contact-card p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl text-center mb-12 sm:mb-16" id="contact">
+        <div class="max-w-2xl mx-auto">
+          <div class="bg-primary/10 w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+            <i class="fas fa-envelope-open-text text-primary text-2xl sm:text-3xl"></i>
+          </div>
+          <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-primary mb-3 sm:mb-4">Join Our Mission</h3>
+          <p class="text-text-light text-sm sm:text-base md:text-lg mb-6 sm:mb-8 max-w-xl mx-auto">Partner with us to transform agriculture through ethical financing. Get in touch to learn more about investment opportunities or collaboration.</p>
+          <a href="mailto:rawnakahasan1306@gmail.com"
+            class="btn-primary inline-flex items-center text-white py-3 px-6 sm:py-4 sm:px-10 rounded-full font-semibold text-sm sm:text-base md:text-lg shadow-lg">
+            <i class="fas fa-envelope mr-2 sm:mr-3"></i>
+            info.urbor@gmail.com
+          </a>
+          <div class="mt-6 sm:mt-8 text-text-light text-xs sm:text-sm">
+            <p><i class="fas fa-clock mr-2"></i> Typically respond within 24 hours</p>
+          </div>
+        </div>
       </div>
 
-      <!-- Footer -->
-      <footer class="text-center py-6 text-text-light text-sm border-t border-border">
-        <p>&copy; 2025 Urbor. All rights reserved.</p>
-      </footer>
+<!-- Simple Footer -->
+<footer class="bg-primary text-white pt-12 pb-8">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+      <!-- Brand Column -->
+      <div>
+        <div class="flex items-center mb-4">
+          <img src="content/images/URBOR.png" alt="Urbor Logo" class="h-10 mr-3" />
+    
+        </div>
+        <p class="text-white/80 text-sm mb-4">
+          Shariah-compliant agricultural financing empowering underserved communities through sustainable, ethical solutions.
+        </p>
+        <div class="flex space-x-4">
+          <a href="https://www.facebook.com/share/1CxGKqmzDp/" class="text-white/70 hover:text-white transition" aria-label="Facebook">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+        <ul class="space-y-2">
+          <li><a href="#home" class="text-white/70 hover:text-white transition text-sm">Home</a></li>
+          <li><a href="about.html" class="text-white/70 hover:text-white transition text-sm">About</a></li>
+          <li><a href="#projects" class="text-white/70 hover:text-white transition text-sm">Projects</a></li>
+          <li><a href="#team" class="text-white/70 hover:text-white transition text-sm">Team</a></li>
+          <li><a href="#contact" class="text-white/70 hover:text-white transition text-sm">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div>
+        <h4 class="font-bold text-lg mb-4">Contact Us</h4>
+        <div class="space-y-3">
+          <div class="flex items-start">
+            <i class="fas fa-envelope mt-1 mr-3 text-secondary"></i>
+            <a href="mailto:rawnakahasan1306@gmail.com" class="text-white/70 hover:text-white transition text-sm">
+              info.urbor@gmail.com
+            </a>
+          </div>
+          <p class="text-white/70 text-sm flex items-center">
+            <i class="fas fa-map-marker-alt mr-3 text-secondary"></i>
+            Dhaka, Bangladesh
+          </p>
+          <p class="text-white/70 text-sm flex items-center">
+            <i class="fas fa-handshake mr-3 text-secondary"></i>
+            Open to ethical partnerships
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t border-white/20 pt-6">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <p class="text-white/60 text-sm text-center md:text-left mb-4 md:mb-0">
+          &copy; 2025 Urbor. All rights reserved.
+        </p>
+        <div class="flex items-center space-x-6">
+          <span class="text-white/60 text-sm">Shariah-Compliant</span>
+          <span class="text-white/60 text-sm">•</span>
+          <span class="text-white/60 text-sm">Ethical Financing</span>
+          <span class="text-white/60 text-sm">•</span>
+          <span class="text-white/60 text-sm">Sustainable Agriculture</span>
+        </div>
+      </div>
     </div>
   </div>
-
-  <!-- Mobile Menu Toggle Script -->
+</footer>
+  <!-- Mobile Menu Toggle (UNCHANGED LOGIC) -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const btn = document.getElementById('mobile-menu-button');
       const menu = document.getElementById('mobile-menu');
-
       if (btn && menu) {
-        btn.addEventListener('click', () => {
-          menu.classList.toggle('hidden');
-        });
-
-        // Close menu on link click
+        btn.addEventListener('click', () => menu.classList.toggle('hidden'));
         menu.querySelectorAll('a').forEach(link => {
-          link.addEventListener('click', () => {
-            menu.classList.add('hidden');
-          });
+          link.addEventListener('click', () => menu.classList.add('hidden'));
         });
       }
     });
   </script>
 
-  <!-- Project & Team Loader (Your Existing Code) -->
+  <!-- Scroll Progress Indicator -->
   <script>
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.innerText = text;
-      return div.innerHTML;
-    }
-
-    function parseFrontmatter(md) {
-      const match = md.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
-      if (!match) return { data: {}, content: md };
-      const yaml = match[1];
-      const content = match[2];
-      const data = {};
-      yaml.split('\n').forEach(line => {
-        line = line.trim();
-        if (!line || line.startsWith('#')) return;
-        const i = line.indexOf(':');
-        if (i <= 0) return;
-        let key = line.slice(0, i).trim();
-        let value = line.slice(i + 1).trim();
-        if ((value.startsWith('"') && value.endsWith('"')) ||
-            (value.startsWith("'") && value.endsWith("'"))) {
-          value = value.slice(1, -1);
-        }
-        if (value === 'true') value = true;
-        else if (value === 'false') value = false;
-        else if (!isNaN(value) && value !== '') value = Number(value);
-        else if (value.startsWith('[') && value.endsWith(']')) {
-          try {
-            value = JSON.parse(value.replace(/'/g, '"'));
-          } catch (e) {
-            value = [];
-          }
-        }
-        data[key] = value;
-      });
-      return { data, content };
-    }
-
-    function getFirstParagraph(markdownBody) {
-      let clean = markdownBody.replace(/^---[\s\S]*?---\s*/, '');
-      const paragraphs = clean.trim().split(/\n\s*\n/);
-      for (let p of paragraphs) {
-        p = p.trim();
-        if (p && !p.startsWith('#') && !p.startsWith('- ') && !p.startsWith('> ')) {
-          return p
-            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-            .replace(/\*\*(.*?)\*\*/g, '$1')
-            .replace(/\*(.*?)\*/g, '$1')
-            .replace(/_/g, ' ')
-            .replace(/\s+/g, ' ');
-        }
-      }
-      return "No description available.";
-    }
-
-    function renderTag(tag) {
-      return `<span class="inline-block bg-accent/15 text-accent text-xs font-semibold px-2 py-0.5 rounded-full mr-1">${escapeHtml(tag)}</span>`;
-    }
-
-    async function loadProjects() {
-      const container = document.getElementById('projects-container');
-      try {
-        const res = await fetch('/content/projects/manifest.json');
-        if (!res.ok) throw new Error('manifest.json not found');
-        const manifest = await res.json();
-        if (!Array.isArray(manifest) || manifest.length === 0) {
-          container.innerHTML = '<div class="bg-white p-6 rounded-xl text-center text-red-600 col-span-full">No projects to display.</div>';
-          return;
-        }
-
-        let html = '';
-        for (const file of manifest) {
-          const fileRes = await fetch(`/content/projects/${file}`);
-          if (!fileRes.ok) continue;
-          const text = await fileRes.text();
-          const { data, content } = parseFrontmatter(text);
-
-          const dateStr = data.date ? new Date(data.date).toLocaleDateString() : '';
-          const summary = getFirstParagraph(content);
-          const tags = Array.isArray(data.tags) ? data.tags.map(renderTag).join('') : '';
-          const imgHtml = data.image ?
-            `<div class="h-40 overflow-hidden rounded-t-xl"><img src="${data.image}" class="w-full h-full object-cover" alt="${escapeHtml(data.title || 'Project')}"></div>` :
-            `<div class="h-40 bg-light rounded-t-xl"></div>`;
-
-          html += `
-            <div class="bg-white rounded-xl shadow hover:shadow-md transition-shadow flex flex-col h-full">
-              ${imgHtml}
-              <div class="p-4 flex flex-col flex-grow">
-                <h2 class="text-base font-bold text-primary mb-1">${escapeHtml(data.title || 'Untitled Project')}</h2>
-                ${dateStr ? `<div class="text-xs text-text-light mb-1">${dateStr}</div>` : ''}
-                ${tags ? `<div class="flex flex-wrap mb-2">${tags}</div>` : ''}
-                <p class="text-sm text-text-light mb-3 flex-grow">${escapeHtml(summary)}</p>
-                <a href="detail.html?id=${encodeURIComponent(file)}" class="inline-block w-fit bg-secondary text-white text-xs font-semibold py-1.5 px-3 rounded-full hover:bg-[#d56a4f] transition">
-                  Read More
-                </a>
-              </div>
-            </div>
-          `;
-        }
-        container.innerHTML = html;
-      } catch (err) {
-        container.innerHTML = `<div class="bg-white p-6 rounded-xl text-center text-red-600 col-span-full">Failed to load projects.<br>${err.message}</div>`;
-      }
-    }
-
-    async function loadTeam() {
-      const container = document.getElementById('team-container');
-      try {
-        const res = await fetch('/content/teams/manifest.json');
-        if (!res.ok) throw new Error('manifest.json not found');
-        const manifest = await res.json();
-        if (!Array.isArray(manifest) || manifest.length === 0) {
-          container.innerHTML = '<div class="bg-white p-6 rounded-xl text-center text-red-600 col-span-full">No team members to display.</div>';
-          return;
-        }
-
-        let html = '';
-        for (const file of manifest) {
-          const fileRes = await fetch(`/content/teams/${file}`);
-          if (!fileRes.ok) continue;
-          const text = await fileRes.text();
-          const { data, content } = parseFrontmatter(text);
-
-          const bio = content
-            .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-secondary">$1</a>')
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\*(.*?)\*/g, '<em>$1</em>')
-            .replace(/\n/g, '<br>');
-
-          const imgHtml = data.image ?
-            `<div class="w-24 h-24 rounded-full overflow-hidden border-2 border-light shadow mx-auto mb-3"><img src="${data.image}" class="w-full h-full object-cover" onerror="this.style.display='none'"></div>` :
-            '';
-
-          html += `
-            <div class="bg-white rounded-xl p-5 text-center hover:shadow-md transition-shadow">
-              ${imgHtml}
-              <h3 class="text-base font-bold">${escapeHtml(data.title || 'Team Member')}</h3>
-              <p class="text-accent font-semibold text-sm mb-2">${escapeHtml(data.role || 'Role')}</p>
-              <div class="text-text-light text-xs leading-relaxed">${bio}</div>
-            </div>
-          `;
-        }
-        container.innerHTML = html;
-      } catch (err) {
-        container.innerHTML = `<div class="bg-white p-6 rounded-xl text-center text-red-600 col-span-full">Failed to load team.<br>${err.message}</div>`;
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      loadProjects();
-      loadTeam();
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('scrollProgress').style.width = scrolled + '%';
     });
   </script>
-</body>
-</html>
+
+  
