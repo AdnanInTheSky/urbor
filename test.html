@@ -29,6 +29,10 @@
             'fade-in': 'fadeIn 0.8s ease-out',
             'slide-up': 'slideUp 0.6s ease-out',
             'float': 'float 3s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s infinite',
+            'bounce-slow': 'bounce 2s infinite',
+            'shake': 'shake 0.5s ease-in-out',
+            'spin-slow': 'spin 3s linear infinite',
           },
           keyframes: {
             fadeIn: {
@@ -42,6 +46,11 @@
             float: {
               '0%, 100%': { transform: 'translateY(0)' },
               '50%': { transform: 'translateY(-10px)' },
+            },
+            shake: {
+              '0%, 100%': { transform: 'translateX(0)' },
+              '25%': { transform: 'translateX(-5px)' },
+              '75%': { transform: 'translateX(5px)' },
             }
           }
         }
@@ -161,6 +170,7 @@
     .stat-card {
       transition: all 0.3s ease;
       border-top: 4px solid transparent;
+      cursor: pointer;
     }
     
     .stat-card:hover {
@@ -169,9 +179,16 @@
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     }
     
+    .stat-card.active {
+      transform: scale(1.05);
+      border-top-color: #11A49E;
+      box-shadow: 0 20px 40px rgba(17, 164, 158, 0.3);
+    }
+    
     .mission-card {
       background: linear-gradient(to right, white 96%, #3D9E71 4%);
       transition: all 0.3s ease;
+      cursor: pointer;
     }
     
     .mission-card:hover {
@@ -182,6 +199,8 @@
     .project-card {
       transition: all 0.3s ease;
       overflow: hidden;
+      cursor: pointer;
+      position: relative;
     }
     
     .project-card:hover {
@@ -195,6 +214,22 @@
     
     .project-card:hover img {
       transform: scale(1.05);
+    }
+    
+    .project-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(9, 81, 76, 0.9), transparent);
+      color: white;
+      padding: 1.5rem;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .project-card:hover .project-overlay {
+      transform: translateY(0);
     }
     
     .nav-link {
@@ -221,6 +256,7 @@
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
     
     .btn-primary:hover {
@@ -265,6 +301,7 @@
       background: linear-gradient(135deg, #f4f9f6 0%, #ffffff 100%);
       border-left: 5px solid #11A49E;
       transition: all 0.3s ease;
+      cursor: pointer;
     }
     
     .team-summary:hover {
@@ -317,6 +354,62 @@
       transition: width 0.1s ease;
     }
     
+    /* Animated counter */
+    .counter {
+      font-weight: bold;
+      transition: all 0.5s ease;
+    }
+    
+    /* Interactive elements */
+    .interactive-btn {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .interactive-btn:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    
+    .interactive-btn:hover:before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    /* Floating action button */
+    .fab {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #11A49E, #3D9E71);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 20px rgba(17, 164, 158, 0.4);
+      cursor: pointer;
+      z-index: 90;
+      transition: all 0.3s ease;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .fab:hover {
+      transform: scale(1.1) rotate(90deg);
+      box-shadow: 0 6px 25px rgba(17, 164, 158, 0.6);
+    }
+    
     /* Mobile responsive adjustments */
     @media (max-width: 768px) {
       .section-header h2 {
@@ -334,6 +427,14 @@
       .contact-card {
         padding: 2rem 1.5rem;
       }
+      
+      .fab {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      }
     }
     
     @media (max-width: 640px) {
@@ -349,11 +450,104 @@
         font-size: 1rem;
       }
     }
+    
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal.show {
+      display: flex;
+      opacity: 1;
+    }
+    
+    .modal-content {
+      background: white;
+      max-width: 500px;
+      width: 90%;
+      border-radius: 20px;
+      padding: 2rem;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+    
+    .modal.show .modal-content {
+      transform: scale(1);
+    }
+    
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: #09514C;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      transform: translateX(120%);
+      transition: transform 0.3s ease;
+    }
+    
+    .toast.show {
+      transform: translateX(0);
+    }
   </style>
 </head>
 <body>
   <!-- Scroll Progress Indicator -->
   <div class="scroll-progress" id="scrollProgress"></div>
+  
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <div class="flex items-center">
+      <i class="fas fa-check-circle mr-3 text-secondary"></i>
+      <span id="toastMessage">Action completed successfully!</span>
+    </div>
+  </div>
+  
+  <!-- Floating Action Button -->
+  <div class="fab" id="fab" title="Quick Actions">
+    <i class="fas fa-bolt"></i>
+  </div>
+  
+  <!-- FAB Menu -->
+  <div class="fixed bottom-24 right-8 hidden flex-col space-y-3 z-80" id="fabMenu">
+    <button class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center shadow-lg transform transition hover:scale-110 hover:rotate-12" title="Scroll to Top" id="scrollTopBtn">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+    <button class="w-12 h-12 rounded-full bg-accent text-white flex items-center justify-center shadow-lg transform transition hover:scale-110 hover:-rotate-12" title="Quick Contact" id="quickContactBtn">
+      <i class="fas fa-envelope"></i>
+    </button>
+    <button class="w-12 h-12 rounded-full bg-secondary text-white flex items-center justify-center shadow-lg transform transition hover:scale-110 hover:rotate-12" title="Share Website" id="shareBtn">
+      <i class="fas fa-share-alt"></i>
+    </button>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-primary" id="modalTitle">Modal Title</h3>
+        <button class="text-text-light hover:text-primary text-2xl" id="closeModal">&times;</button>
+      </div>
+      <div class="text-text-light" id="modalContent">
+        Modal content goes here...
+      </div>
+    </div>
+  </div>
   
   <div class="background-gradient">
     <!-- Navbar -->
@@ -361,15 +555,14 @@
       <div class="max-w-7xl mx-auto flex justify-between items-center">
         <a href="#" class="flex items-center group" aria-label="Urbor Logo">
           <img src="content/images/URBOR.png" alt="Urbor Logo" class="h-10 sm:h-12 transition-transform duration-300 group-hover:scale-105" />
-          
         </a>
         <ul class="hidden md:flex gap-6 lg:gap-8 list-none">
           <li><a href="#home" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">Home</a></li>
-          <li><a href="about.html" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">About</a></li>
+          <li><a href="/dev.html" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">About</a></li>
           <li><a href="#projects" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">Projects</a></li>
-          <li><a href="#team" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">Team</a></li>
+          <li><a href="/dev.html" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">Team</a></li>
           <li><a href="#contact" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">Contact</a></li>
-          <li><a href="https://www.farman.pro" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">Farman</a></li>
+          <li><a href="/dev.html" class="nav-link text-text-light font-semibold hover:text-primary transition duration-300">Farman</a></li>
         </ul>
         <button id="mobile-menu-button" class="md:hidden text-text-dark focus:outline-none p-2 rounded-lg hover:bg-light transition duration-300">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -393,18 +586,17 @@
       <div class="hero animate-fade-in" id="home"
         style="background: url('/content/images/Screenshot 2025-12-17 174132.png') center/cover no-repeat;">
         <div class="hero-content">
- 
           <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold mb-4 sm:mb-6 leading-tight text-white drop-shadow-lg">
-            Empowering Agriculture<br>Through <span class="text-secondary">Ethical Finance</span>
+            Empowering Agriculture<br>Through <span class="text-secondary animate-pulse-slow">Ethical Finance</span>
           </h1>
           <p class="text-sm sm:text-base md:text-lg lg:text-xl opacity-95 max-w-3xl mx-auto text-white/95 leading-relaxed px-2 sm:px-0">
             We bridge urban capital with agricultural communities through sustainable, zero-risk, profit-sharing financing solutions.
           </p>
           <div class="mt-6 sm:mt-10">
-            <a href="#projects" class="btn-primary inline-flex items-center text-white py-2.5 sm:py-3 px-6 sm:px-8 rounded-full font-semibold text-sm sm:text-base md:text-lg">
+            <button class="btn-primary interactive-btn inline-flex items-center text-white py-2.5 sm:py-3 px-6 sm:px-8 rounded-full font-semibold text-sm sm:text-base md:text-lg" id="ctaButton">
               Explore Our Projects
               <i class="fas fa-arrow-right ml-2 sm:ml-3 transition-transform duration-300 group-hover:translate-x-2"></i>
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -418,37 +610,44 @@
           <div>
             <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-primary mb-3 sm:mb-4">Our Mission</h3>
             <p class="text-text-light text-base sm:text-lg leading-relaxed">
-              We strategically move <span class="text-secondary font-bold">urban capital</span> into agriculture, providing farmers with zero-risk, profit-sharing finance and transforming farming into a stable, investable industry for sustainable community growth.
+              We strategically move <span class="text-secondary font-bold animate-pulse-slow">urban capital</span> into agriculture, providing farmers with zero-risk, profit-sharing finance and transforming farming into a stable, investable industry for sustainable community growth.
             </p>
+            <div class="expanded-content mt-4" id="missionExpand">
+              <p class="text-text-light text-sm sm:text-base leading-relaxed pt-4 border-t border-border/50">
+                Our approach combines traditional Islamic finance principles with modern agricultural technology to create sustainable value chains that benefit both investors and farming communities. We focus on transparency, ethical returns, and measurable social impact.
+              </p>
+            </div>
+            <button class="mt-4 text-primary hover:text-secondary font-semibold text-sm flex items-center" id="toggleMission">
+              Read More <i class="fas fa-chevron-down ml-2 transition-transform duration-300" id="missionIcon"></i>
+            </button>
           </div>
         </div>
       </div>
 
-<!-- Stats -->
-<div class="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12 sm:mb-20 mx-auto max-w-5xl">
-  <!-- Stat cards unchanged -->
-  <div class="stat-card bg-white p-4 sm:p-6 rounded-2xl shadow-lg text-center">
-    <div class="bg-primary/10 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-      <i class="fas fa-handshake text-primary text-lg sm:text-2xl"></i>
-    </div>
-    <span class="block text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary mb-1 sm:mb-2">10+</span>
-    <div class="text-xs sm:text-sm text-text-light font-medium">Members</div>
-  </div>
-  <div class="stat-card bg-white p-4 sm:p-6 rounded-2xl shadow-lg text-center">
-    <div class="bg-primary/10 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-      <i class="fas fa-tractor text-primary text-lg sm:text-2xl"></i>
-    </div>
-    <span class="block text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary mb-1 sm:mb-2">10+</span>
-    <div class="text-xs sm:text-sm text-text-light font-medium">Farmers Empowered</div>
-  </div>
-  <div class="stat-card bg-white p-4 sm:p-6 rounded-2xl shadow-lg text-center">
-    <div class="bg-primary/10 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-      <i class="fas fa-money-bill-wave text-primary text-lg sm:text-2xl"></i>
-    </div>
-    <span class="block text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary mb-1 sm:mb-2">1.5M+</span>
-    <div class="text-xs sm:text-sm text-text-light font-medium">Taka Financing</div>
-  </div>
-</div>
+      <!-- Stats -->
+      <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12 sm:mb-20 mx-auto max-w-5xl">
+        <div class="stat-card bg-white p-4 sm:p-6 rounded-2xl shadow-lg text-center" data-count="10">
+          <div class="bg-primary/10 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+            <i class="fas fa-handshake text-primary text-lg sm:text-2xl"></i>
+          </div>
+          <span class="counter block text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary mb-1 sm:mb-2">0</span>
+          <div class="text-xs sm:text-sm text-text-light font-medium">Members</div>
+        </div>
+        <div class="stat-card bg-white p-4 sm:p-6 rounded-2xl shadow-lg text-center" data-count="10">
+          <div class="bg-primary/10 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+            <i class="fas fa-tractor text-primary text-lg sm:text-2xl"></i>
+          </div>
+          <span class="counter block text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary mb-1 sm:mb-2">0</span>
+          <div class="text-xs sm:text-sm text-text-light font-medium">Farmers Empowered</div>
+        </div>
+        <div class="stat-card bg-white p-4 sm:p-6 rounded-2xl shadow-lg text-center" data-count="1500000">
+          <div class="bg-primary/10 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+            <i class="fas fa-money-bill-wave text-primary text-lg sm:text-2xl"></i>
+          </div>
+          <span class="counter block text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary mb-1 sm:mb-2">0</span>
+          <div class="text-xs sm:text-sm text-text-light font-medium">Taka Financing</div>
+        </div>
+      </div>
 
       <!-- Image Gallery Section -->
       <div class="section-header text-center mb-8 sm:mb-12" id="projects">
@@ -458,32 +657,68 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-20">
         <!-- Image 1 -->
         <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
-            <img src="content/images/1-Maize-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+          <div class="relative h-64 overflow-hidden">
+            <img src="content/images/1-Maize-Pilot-Project.png" alt="Maize Pilot Project" class="w-full h-full object-cover transition-transform duration-500" />
+            <div class="project-overlay">
+              <h4 class="font-bold text-lg">Maize Pilot Project</h4>
+              <p class="text-sm opacity-90">Sustainable maize cultivation with modern techniques</p>
+            </div>
+          </div>
         </div>
         
         <!-- Image 2 -->
         <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
-            <img src="content/images/1-Maize-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+          <div class="relative h-64 overflow-hidden">
+            <img src="content/images/2-Mixed-Vegetable-Pilot-Project.png" alt="Mixed Vegetable Project" class="w-full h-full object-cover transition-transform duration-500" />
+            <div class="project-overlay">
+              <h4 class="font-bold text-lg">Mixed Vegetable Project</h4>
+              <p class="text-sm opacity-90">Diverse vegetable cultivation for market stability</p>
+            </div>
+          </div>
         </div>
         
         <!-- Image 3 -->
         <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
-            <img src="content/images/1-Maize-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+          <div class="relative h-64 overflow-hidden">
+            <img src="content/images/3-Cattle-Project.png" alt="Cattle Project" class="w-full h-full object-cover transition-transform duration-500" />
+            <div class="project-overlay">
+              <h4 class="font-bold text-lg">Cattle Project</h4>
+              <p class="text-sm opacity-90">Livestock development for sustainable farming</p>
+            </div>
+          </div>
         </div>
         
         <!-- Image 4 -->
         <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
-            <img src="content/images/1-Maize-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+          <div class="relative h-64 overflow-hidden">
+            <img src="content/images/4-Duck-(Meat)-Pilot-Project.png" alt="Duck Farming Project" class="w-full h-full object-cover transition-transform duration-500" />
+            <div class="project-overlay">
+              <h4 class="font-bold text-lg">Duck Farming Project</h4>
+              <p class="text-sm opacity-90">Poultry diversification for increased income</p>
+            </div>
+          </div>
         </div>
         
         <!-- Image 5 -->
         <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
-            <img src="content/images/1-Maize-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+          <div class="relative h-64 overflow-hidden">
+            <img src="content/images/5-Faomi-Chicken-(Egg)-Pilot-Project.png" alt="Chicken Egg Project" class="w-full h-full object-cover transition-transform duration-500" />
+            <div class="project-overlay">
+              <h4 class="font-bold text-lg">Chicken Egg Project</h4>
+              <p class="text-sm opacity-90">Egg production with improved poultry breeds</p>
+            </div>
+          </div>
         </div>
         
         <!-- Image 6 -->
         <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden">
-            <img src="content/images/1-Maize-Pilot-Project.png" alt="Training session" class="w-full h-full object-cover transition-transform duration-500" />
+          <div class="relative h-64 overflow-hidden">
+            <img src="content/images/6-Goat-Project---1.png" alt="Goat Project" class="w-full h-full object-cover transition-transform duration-500" />
+            <div class="project-overlay">
+              <h4 class="font-bold text-lg">Goat Project</h4>
+              <p class="text-sm opacity-90">Goat rearing for sustainable livestock income</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -492,12 +727,12 @@
         <h2 class="relative inline-block text-xl sm:text-2xl md:text-3xl font-extrabold text-primary pb-2">Our Team</h2>
         <p class="text-text-light max-w-2xl mx-auto mt-4 sm:mt-6 text-sm sm:text-base md:text-lg">Dedicated professionals committed to ethical finance and agricultural transformation.</p>
       </div>
-      <div class="team-summary p-6 sm:p-8 rounded-2xl shadow-lg text-center mb-12 sm:mb-20">
+      <div class="team-summary p-6 sm:p-8 rounded-2xl shadow-lg text-center mb-12 sm:mb-20" id="teamExpand">
         <div class="flex flex-col md:flex-row items-center justify-center">
           <div class="mb-4 sm:mb-6 md:mb-0 md:mr-6 lg:mr-8">
             <div class="relative inline-block">
               <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center text-white text-xl sm:text-3xl font-bold">
-                11
+                <span class="counter" data-count="11">0</span>
               </div>
               <div class="absolute -bottom-2 -right-2 bg-secondary text-white text-xs font-bold py-1 px-2 sm:px-3 rounded-full">
                 TEAM
@@ -519,11 +754,10 @@
           </div>
           <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-primary mb-3 sm:mb-4">Join Our Mission</h3>
           <p class="text-text-light text-sm sm:text-base md:text-lg mb-6 sm:mb-8 max-w-xl mx-auto">Partner with us to transform agriculture through ethical financing. Get in touch to learn more about investment opportunities or collaboration.</p>
-          <a href="mailto:rawnakahasan1306@gmail.com"
-            class="btn-primary inline-flex items-center text-white py-3 px-6 sm:py-4 sm:px-10 rounded-full font-semibold text-sm sm:text-base md:text-lg shadow-lg">
+          <button id="contactBtn" class="btn-primary interactive-btn inline-flex items-center text-white py-3 px-6 sm:py-4 sm:px-10 rounded-full font-semibold text-sm sm:text-base md:text-lg shadow-lg">
             <i class="fas fa-envelope mr-2 sm:mr-3"></i>
             info.urbor@gmail.com
-          </a>
+          </button>
           <div class="mt-6 sm:mt-8 text-text-light text-xs sm:text-sm">
             <p><i class="fas fa-clock mr-2"></i> Typically respond within 24 hours</p>
           </div>
@@ -550,79 +784,343 @@
         </div>
       </div>
 
-      <!-- Quick Links -->
-      <div>
-        <h4 class="font-bold text-lg mb-4">Quick Links</h4>
-        <ul class="space-y-2">
-          <li><a href="#home" class="text-white/70 hover:text-white transition text-sm">Home</a></li>
-          <li><a href="about.html" class="text-white/70 hover:text-white transition text-sm">About</a></li>
-          <li><a href="#projects" class="text-white/70 hover:text-white transition text-sm">Projects</a></li>
-          <li><a href="#team" class="text-white/70 hover:text-white transition text-sm">Team</a></li>
-          <li><a href="#contact" class="text-white/70 hover:text-white transition text-sm">Contact</a></li>
-        </ul>
-      </div>
+            <!-- Quick Links -->
+            <div>
+              <h4 class="font-bold text-lg mb-4">Quick Links</h4>
+              <ul class="space-y-2">
+                <li><a href="#home" class="text-white/70 hover:text-white transition text-sm footer-link">Home</a></li>
+                <li><a href="about.html" class="text-white/70 hover:text-white transition text-sm footer-link">About</a></li>
+                <li><a href="#projects" class="text-white/70 hover:text-white transition text-sm footer-link">Projects</a></li>
+                <li><a href="#team" class="text-white/70 hover:text-white transition text-sm footer-link">Team</a></li>
+                <li><a href="#contact" class="text-white/70 hover:text-white transition text-sm footer-link">Contact</a></li>
+              </ul>
+            </div>
 
-      <!-- Contact Info -->
-      <div>
-        <h4 class="font-bold text-lg mb-4">Contact Us</h4>
-        <div class="space-y-3">
-          <div class="flex items-start">
-            <i class="fas fa-envelope mt-1 mr-3 text-secondary"></i>
-            <a href="mailto:rawnakahasan1306@gmail.com" class="text-white/70 hover:text-white transition text-sm">
-              info.urbor@gmail.com
-            </a>
+            <!-- Contact Info -->
+            <div>
+              <h4 class="font-bold text-lg mb-4">Contact Us</h4>
+              <div class="space-y-3">
+                <div class="flex items-start">
+                  <i class="fas fa-envelope mt-1 mr-3 text-secondary"></i>
+                  <a href="mailto:info.urbor@gmail.com" class="text-white/70 hover:text-white transition text-sm footer-link">
+                    info.urbor@gmail.com
+                  </a>
+                </div>
+                <p class="text-white/70 text-sm flex items-center">
+                  <i class="fas fa-map-marker-alt mr-3 text-secondary"></i>
+                  Dhaka, Bangladesh
+                </p>
+                <p class="text-white/70 text-sm flex items-center">
+                  <i class="fas fa-handshake mr-3 text-secondary"></i>
+                  Open to ethical partnerships
+                </p>
+              </div>
+            </div>
           </div>
-          <p class="text-white/70 text-sm flex items-center">
-            <i class="fas fa-map-marker-alt mr-3 text-secondary"></i>
-            Dhaka, Bangladesh
-          </p>
-          <p class="text-white/70 text-sm flex items-center">
-            <i class="fas fa-handshake mr-3 text-secondary"></i>
-            Open to ethical partnerships
-          </p>
-        </div>
-      </div>
-    </div>
 
-    <!-- Divider -->
-    <div class="border-t border-white/20 pt-6">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <p class="text-white/60 text-sm text-center md:text-left mb-4 md:mb-0">
-          &copy; 2025 Urbor. All rights reserved.
-        </p>
-        <div class="flex items-center space-x-6">
-          <span class="text-white/60 text-sm">Shariah-Compliant</span>
-          <span class="text-white/60 text-sm">•</span>
-          <span class="text-white/60 text-sm">Ethical Financing</span>
-          <span class="text-white/60 text-sm">•</span>
-          <span class="text-white/60 text-sm">Sustainable Agriculture</span>
+          <!-- Divider -->
+          <div class="border-t border-white/20 pt-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+              <p class="text-white/60 text-sm text-center md:text-left mb-4 md:mb-0">
+                &copy; 2025 Urbor. All rights reserved.
+              </p>
+              <div class="flex items-center space-x-6">
+                <span class="text-white/60 text-sm">Shariah-Compliant</span>
+                <span class="text-white/60 text-sm">•</span>
+                <span class="text-white/60 text-sm">Ethical Financing</span>
+                <span class="text-white/60 text-sm">•</span>
+                <span class="text-white/60 text-sm">Sustainable Agriculture</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </footer>
     </div>
   </div>
-</footer>
-  <!-- Mobile Menu Toggle (UNCHANGED LOGIC) -->
+
+  <!-- JavaScript for Interactive Features -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const btn = document.getElementById('mobile-menu-button');
-      const menu = document.getElementById('mobile-menu');
-      if (btn && menu) {
-        btn.addEventListener('click', () => menu.classList.toggle('hidden'));
-        menu.querySelectorAll('a').forEach(link => {
-          link.addEventListener('click', () => menu.classList.add('hidden'));
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile Menu Toggle
+      const mobileMenuBtn = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+          mobileMenuBtn.classList.toggle('text-primary');
+        });
+        
+        mobileMenu.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
         });
       }
+
+      // Scroll Progress Indicator
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('scrollProgress').style.width = scrolled + '%';
+      });
+
+      // Animated Counter for Stats
+      const counters = document.querySelectorAll('.counter');
+      const speed = 100; // Lower is faster
+      
+      const startCounter = (counter) => {
+        const target = parseInt(counter.getAttribute('data-count') || counter.parentElement.getAttribute('data-count'));
+        const count = parseInt(counter.innerText);
+        const increment = Math.ceil(target / speed);
+        
+        if (count < target) {
+          counter.innerText = count + increment;
+          setTimeout(() => startCounter(counter), 20);
+        } else {
+          counter.innerText = target.toLocaleString();
+        }
+      };
+      
+      // Intersection Observer for counters
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            startCounter(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      
+      counters.forEach(counter => {
+        observer.observe(counter);
+      });
+
+      // Mission Card Expand/Collapse
+      const toggleMission = document.getElementById('toggleMission');
+      const missionExpand = document.getElementById('missionExpand');
+      const missionIcon = document.getElementById('missionIcon');
+      
+      if (toggleMission && missionExpand) {
+        toggleMission.addEventListener('click', () => {
+          missionExpand.classList.toggle('show');
+          missionIcon.classList.toggle('rotate-180');
+          toggleMission.innerHTML = missionExpand.classList.contains('show') 
+            ? 'Read Less <i class="fas fa-chevron-up ml-2 transition-transform duration-300"></i>'
+            : 'Read More <i class="fas fa-chevron-down ml-2 transition-transform duration-300"></i>';
+        });
+      }
+
+      // Stat Card Click Effects
+      const statCards = document.querySelectorAll('.stat-card');
+      statCards.forEach(card => {
+        card.addEventListener('click', function() {
+          statCards.forEach(c => c.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Show toast notification
+          showToast('Statistic highlighted!');
+        });
+      });
+
+      // Project Card Modal on Click
+      const projectCards = document.querySelectorAll('.project-card');
+      projectCards.forEach(card => {
+        card.addEventListener('click', function() {
+          const imgSrc = this.querySelector('img').src;
+          const title = this.querySelector('h4').textContent;
+          const description = this.querySelector('p').textContent;
+          
+          openModal(title, `
+            <div class="text-center">
+              <img src="${imgSrc}" alt="${title}" class="w-full h-64 object-cover rounded-lg mb-4">
+              <p class="text-text-light mb-4">${description}</p>
+              <p class="text-sm text-text-light">This project demonstrates our commitment to sustainable agriculture through ethical financing models that benefit both farmers and investors.</p>
+            </div>
+          `);
+        });
+      });
+
+      // Interactive Buttons
+      const ctaButton = document.getElementById('ctaButton');
+      if (ctaButton) {
+        ctaButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+          showToast('Scrolling to projects!');
+        });
+      }
+
+      const contactBtn = document.getElementById('contactBtn');
+      if (contactBtn) {
+        contactBtn.addEventListener('click', function() {
+          window.location.href = 'mailto:info.urbor@gmail.com?subject=Inquiry about Urbor&body=Hello, I would like to learn more about Urbor...';
+          showToast('Opening email client...');
+        });
+      }
+
+      // Floating Action Button
+      const fab = document.getElementById('fab');
+      const fabMenu = document.getElementById('fabMenu');
+      const scrollTopBtn = document.getElementById('scrollTopBtn');
+      const quickContactBtn = document.getElementById('quickContactBtn');
+      const shareBtn = document.getElementById('shareBtn');
+      
+      if (fab && fabMenu) {
+        fab.addEventListener('click', () => {
+          fabMenu.classList.toggle('hidden');
+          fab.classList.toggle('animate-spin-slow');
+        });
+        
+        // Click outside to close FAB menu
+        document.addEventListener('click', (e) => {
+          if (!fab.contains(e.target) && !fabMenu.contains(e.target)) {
+            fabMenu.classList.add('hidden');
+            fab.classList.remove('animate-spin-slow');
+          }
+        });
+      }
+      
+      if (scrollTopBtn) {
+        scrollTopBtn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          fabMenu.classList.add('hidden');
+          showToast('Scrolling to top!');
+        });
+      }
+      
+      if (quickContactBtn) {
+        quickContactBtn.addEventListener('click', () => {
+          window.location.href = 'mailto:info.urbor@gmail.com';
+          fabMenu.classList.add('hidden');
+          showToast('Opening contact email!');
+        });
+      }
+      
+      if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+          if (navigator.share) {
+            navigator.share({
+              title: 'Urbor - Shariah-Compliant Agricultural Financing',
+              text: 'Check out Urbor - Empowering agriculture through ethical finance!',
+              url: window.location.href,
+            });
+          } else {
+            // Fallback for browsers that don't support Web Share API
+            navigator.clipboard.writeText(window.location.href);
+            showToast('Link copied to clipboard!');
+          }
+          fabMenu.classList.add('hidden');
+        });
+      }
+
+      // Modal Functions
+      const modal = document.getElementById('modal');
+      const closeModal = document.getElementById('closeModal');
+      
+      function openModal(title, content) {
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalContent').innerHTML = content;
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+      
+      function closeModalFunc() {
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+      }
+      
+      if (closeModal) {
+        closeModal.addEventListener('click', closeModalFunc);
+      }
+      
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModalFunc();
+        }
+      });
+      
+      // Toast Notification
+      function showToast(message) {
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+        
+        toastMessage.textContent = message;
+        toast.classList.add('show');
+        
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3000);
+      }
+
+      // Parallax effect on hero
+      window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const hero = document.querySelector('.hero');
+        if (hero) {
+          hero.style.transform = `translateY(${scrolled * 0.05}px)`;
+        }
+      });
+
+      // Interactive hover effects for team summary
+      const teamSummary = document.getElementById('teamExpand');
+      if (teamSummary) {
+        teamSummary.addEventListener('mouseenter', function() {
+          this.style.background = 'linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%)';
+        });
+        
+        teamSummary.addEventListener('mouseleave', function() {
+          this.style.background = 'linear-gradient(135deg, #f4f9f6 0%, #ffffff 100%)';
+        });
+        
+        teamSummary.addEventListener('click', function() {
+          this.classList.toggle('animate-shake');
+          setTimeout(() => {
+            this.classList.remove('animate-shake');
+          }, 500);
+          showToast('Team information clicked!');
+        });
+      }
+
+      // Smooth scroll for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          
+          // Skip if it's an external link or mailto
+          if (href.startsWith('http') || href.startsWith('mailto') || href.includes('.html')) {
+            return;
+          }
+          
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+
+      // Add keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        // Escape key closes modal
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
+          closeModalFunc();
+        }
+        
+        // Space/Enter on stat cards
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('stat-card')) {
+          e.target.click();
+          e.preventDefault();
+        }
+      });
+
+      // Initialize with a welcome toast
+      setTimeout(() => {
+        showToast('Welcome to Urbor');
+      }, 1000);
     });
   </script>
-
-  <!-- Scroll Progress Indicator -->
-  <script>
-    window.addEventListener('scroll', () => {
-      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      document.getElementById('scrollProgress').style.width = scrolled + '%';
-    });
-  </script>
-
-  
+</body>
+</html>

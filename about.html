@@ -4,21 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About Us | NGO</title>
-  <!-- Tailwind CSS CDN (cleaned up URL) -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           backgroundImage: {
-            'gradient-custom': 'linear-gradient(to bottom right, #0d47a1, #a5d6a7)',
+            'gradient-custom': 'linear-gradient(to bottom right, #0f4c5c, #a5d6a7)', // Adjusted to match your blue-green gradient
           },
           colors: {
-            primary: '#1e3a8a',
-            gray: {
-              700: '#374151',
-              800: '#1f2937'
-            }
+            primary: '#0f4c5c',
+            secondary: '#e27d60',
+            accent: '#8a9b6c',
+            light: '#f4f9f6',
+            'text-dark': '#2d3e50',
+            'text-light': '#5a6b7c',
+            border: '#dde6e0'
           }
         }
       }
@@ -29,83 +31,84 @@
       background: rgba(255, 255, 255, 0.75);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(221, 230, 224, 0.6); /* border: #dde6e0 with opacity */
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Optional: smooth mobile menu animation */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-slide-up {
+      animation: slideUp 0.2s ease-out;
     }
   </style>
 </head>
 <body class="bg-gradient-custom min-h-screen flex flex-col font-sans">
 
   <!-- Navbar -->
-  <nav class="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center py-4">
-      <!-- Logo -->
-      <a href="/" class="flex items-center" aria-label="Urbor Logo">
-        <img src="content/images/URBOR.png" alt="Urbor Logo" class="h-12" />
+  <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md py-4 px-4 sm:px-6 z-50 shadow-sm border-b border-border">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <a href="#" class="flex items-center group" aria-label="Urbor Logo">
+        <img src="content/images/URBOR.png" alt="Urbor Logo" class="h-10 sm:h-12 transition-transform duration-300 group-hover:scale-105" />
       </a>
-
-      <!-- Desktop Links -->
-      <ul class="hidden md:flex gap-5 list-none">
-        <li><a href="/" class="text-gray-700 font-medium hover:text-primary transition">Home</a></li>
-        <li><a href="/about.html" class="text-primary font-medium">About</a></li>
-        <li><a href="/" class="text-gray-700 font-medium hover:text-primary transition">Projects</a></li>
-        <li><a href="/" class="text-gray-700 font-medium hover:text-primary transition">Team</a></li>
-        <li><a href="/" class="text-gray-700 font-medium hover:text-primary transition">Contact</a></li>
-        <li><a href="/" class="text-gray-700 font-medium hover:text-primary transition">Farmen</a></li> 
+      <ul class="hidden md:flex gap-5 lg:gap-7 list-none">
+        <li><a href="#home" class="text-text-light font-medium hover:text-primary transition duration-200">Home</a></li>
+        <li><a href="about.html" class="text-text-light font-medium hover:text-primary transition duration-200">About</a></li>
+        <li><a href="#projects" class="text-text-light font-medium hover:text-primary transition duration-200">Projects</a></li>
+        <li><a href="#team" class="text-text-light font-medium hover:text-primary transition duration-200">Team</a></li>
+        <li><a href="#contact" class="text-text-light font-medium hover:text-primary transition duration-200">Contact</a></li>
+        <li><a href="https://www.farman.pro" class="text-text-light font-medium hover:text-primary transition duration-200">Farman</a></li>
       </ul>
-
-      <!-- Mobile Hamburger -->
-      <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+      <button id="mobile-menu-button" class="md:hidden text-text-dark focus:outline-none p-2 rounded-lg hover:bg-light transition duration-200">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
     </div>
-
-    <!-- Mobile Menu (hidden by default) -->
-    <ul id="mobile-menu" class="hidden md:hidden flex flex-col gap-3 px-4 pb-4">
-      <li><a href="/" class="text-gray-700 font-medium hover:text-primary block py-1">Home</a></li>
-      <li><a href="/about.html" class="text-primary font-medium block py-1">About</a></li>
-      <li><a href="/" class="text-gray-700 font-medium hover:text-primary block py-1">Projects</a></li>
-      <li><a href="/" class="text-gray-700 font-medium hover:text-primary block py-1">Team</a></li>
-      <li><a href="/" class="text-gray-700 font-medium hover:text-primary block py-1">Contact</a></li>
-      <li><a href="/" class="text-gray-700 font-medium hover:text-primary block py-1">farmen</a></li>
+    <ul id="mobile-menu" class="hidden md:hidden flex flex-col gap-2 mt-4 px-4 pb-4 bg-white rounded-xl shadow-lg border border-border animate-slide-up">
+      <li><a href="#home" class="block py-3 px-4 text-text-light font-medium hover:text-primary hover:bg-light rounded-lg transition duration-200">Home</a></li>
+      <li><a href="about.html" class="block py-3 px-4 text-text-light font-medium hover:text-primary hover:bg-light rounded-lg transition duration-200">About</a></li>
+      <li><a href="#projects" class="block py-3 px-4 text-text-light font-medium hover:text-primary hover:bg-light rounded-lg transition duration-200">Projects</a></li>
+      <li><a href="#team" class="block py-3 px-4 text-text-light font-medium hover:text-primary hover:bg-light rounded-lg transition duration-200">Team</a></li>
+      <li><a href="#contact" class="block py-3 px-4 text-text-light font-medium hover:text-primary hover:bg-light rounded-lg transition duration-200">Contact</a></li>
+      <li><a href="https://www.farman.pro" class="block py-3 px-4 text-text-light font-medium hover:text-primary hover:bg-light rounded-lg transition duration-200">Farman</a></li>
     </ul>
   </nav>
 
   <!-- Main Content -->
-  <main class="flex-grow px-4 sm:px-6 py-12">
+  <main class="flex-grow pt-24 pb-12 px-4 sm:px-6"> <!-- Added top padding to offset fixed navbar -->
     <div class="max-w-3xl mx-auto w-full">
       <div class="pure-glass w-full p-6 sm:p-8 rounded-xl">
-        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">About Us</h1>
+        <h1 class="text-2xl sm:text-3xl font-bold text-text-dark mb-6">About Us</h1>
 
-        <p class="text-gray-700 mb-6">
+        <p class="text-text-light mb-6 leading-relaxed">
           Our objective is to channel cash flow from urban to rural areas to mitigate the cash flow shortage in rural regions, specifically in the agricultural sector. We aim to transform agriculture into an investable industry and make microfinancing risk-free for farmers.
         </p>
 
-        <p class="text-gray-700 mb-6">
+        <p class="text-text-light mb-6 leading-relaxed">
           Our business aims to contribute to societal improvement by addressing critical issues in both the agricultural and financial sectors.
         </p>
 
-        <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mt-8 mb-3">For Farmers: Zero-Risk Scheme</h2>
-        <p class="text-gray-700 mb-6">
+        <h2 class="text-lg sm:text-xl font-semibold text-text-dark mt-8 mb-3">For Farmers: Zero-Risk Scheme</h2>
+        <p class="text-text-light mb-6 leading-relaxed">
           We make micro-financing completely risk-free through our <strong>“Zero-Risk Scheme”</strong>, based on a profit-sharing model and post-harvest repayment. This empowers farmers to access necessary financing for high-yield production without fear of financial loss—improving agricultural productivity and livelihoods.
         </p>
 
-        <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mt-8 mb-3">For Investors: Halal Investment Pool</h2>
-        <p class="text-gray-700 mb-6">
+        <h2 class="text-lg sm:text-xl font-semibold text-text-dark mt-8 mb-3">For Investors: Halal Investment Pool</h2>
+        <p class="text-text-light mb-6 leading-relaxed">
           We offer the <strong>“Halal Investment Pool”</strong>—a unique, Shariah-compliant investment product delivering inflation-beating returns. It serves as a stable alternative to volatile stock markets, underdeveloped bond markets, and low-yield bank deposits, meeting the demand for ethical and sustainable investing.
         </p>
 
-        <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mt-8 mb-3">Our Broader Impact</h2>
-        <p class="text-gray-700">
+        <h2 class="text-lg sm:text-xl font-semibold text-text-dark mt-8 mb-3">Our Broader Impact</h2>
+        <p class="text-text-light leading-relaxed">
           Through community development initiatives, we reduce agricultural production costs—further boosting farmers’ income and fostering inclusive economic growth. By linking risk-free rural financing with ethical urban investment, we drive sustainable development that benefits both rural and urban communities.
         </p>
       </div>
     </div>
   </main>
 
- 
   <!-- Mobile Menu Toggle Script -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -117,7 +120,6 @@
           menu.classList.toggle('hidden');
         });
 
-        // Close menu when a link is clicked
         menu.querySelectorAll('a').forEach(link => {
           link.addEventListener('click', () => {
             menu.classList.add('hidden');

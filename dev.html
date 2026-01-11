@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Under Development</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0f4c5c',
+            secondary: '#e27d60',
+            accent: '#8a9b6c',
+            light: '#f4f9f6',
+            'text-dark': '#2d3e50',
+            'text-light': '#5a6b7c',
+            border: '#dde6e0'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f4c5c 0%, #8a9b6c 100%);
+      min-height: 100vh;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid #dde6e0;
+      border-radius: 8px;
+    }
+    .game-btn {
+      transition: transform 0.1s ease;
+    }
+    .game-btn:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4 text-text-dark">
+  <!-- Main Content -->
+  <div class="glass-card w-full max-w-md p-6 text-center shadow-lg">
+    <h1 class="text-3xl font-bold mb-2 text-primary">Website Under Development</h1>
+    <p class="text-text-light mb-6">
+      We're working hard to bring you something amazing!<br>
+      Meanwhile, enjoy this mini-game:
+    </p>
+
+    <!-- Mini Game -->
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold text-secondary mb-3">Click Counter Challenge</h2>
+      <p class="text-text-light mb-2">Click the button as fast as you can!</p>
+      <div class="text-4xl font-bold text-accent mb-4" id="counter">0</div>
+      <button 
+        id="clickBtn"
+        class="game-btn bg-secondary hover:bg-[#d16a4f] text-white font-bold py-3 px-6 rounded-lg w-full transition-colors"
+      >
+        CLICK ME!
+      </button>
+      <p class="text-text-light mt-3 text-sm">
+        Pro tip: Double-click for +2 points!
+      </p>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="w-full bg-light rounded-full h-2.5 mb-4">
+      <div 
+        id="progressBar" 
+        class="bg-accent h-2.5 rounded-full" 
+        style="width: 0%"
+      ></div>
+    </div>
+    <p class="text-text-light text-sm">
+      Goal: Reach 50 clicks! (Current: <span id="progressText">0%</span>)
+    </p>
+  </div>
+
+  <!-- Footer Note -->
+  <p class="mt-8 text-text-light text-sm">
+    © 2026 NGO Portfolio | Coming Soon
+  </p>
+
+  <script>
+    // Game logic
+    const counterEl = document.getElementById('counter');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const clickBtn = document.getElementById('clickBtn');
+    
+    let count = 0;
+    const GOAL = 50;
+    
+    function updateProgress() {
+      const percentage = Math.min(100, Math.floor((count / GOAL) * 100));
+      progressBar.style.width = `${percentage}%`;
+      progressText.textContent = `${percentage}%`;
+      
+      if(count >= GOAL) {
+        clickBtn.textContent = "🎉 YOU WIN! 🎉";
+        clickBtn.disabled = true;
+        clickBtn.classList.replace('bg-secondary', 'bg-accent');
+      }
+    }
+    
+    clickBtn.addEventListener('click', () => {
+      count++;
+      counterEl.textContent = count;
+      updateProgress();
+    });
+    
+    clickBtn.addEventListener('dblclick', (e) => {
+      e.preventDefault(); // Prevent text selection
+      count += 2;
+      counterEl.textContent = count;
+      updateProgress();
+    });
+  </script>
+</body>
+</html>
