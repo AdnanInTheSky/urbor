@@ -6,15 +6,13 @@
     <title>Urbor - Shariah-Compliant Agricultural Financing</title>
     <link rel="icon" href="/content/images/URBOR.png">
     
+    <!-- Alpine.js CDN (Defer) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <script>
         tailwind.config = {
             theme: {
@@ -26,389 +24,248 @@
                         light: '#5D9951',
                         cream: '#F9FAF8',
                     },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
                 }
             }
         }
     </script>
-    
     <style>
         html { scroll-behavior: smooth; }
-        .gradient-overlay {
-            background: linear-gradient(135deg, rgba(9,81,76,0.9) 0%, rgba(17,164,158,0.8) 100%);
-        }
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(9,81,76,0.15);
-        }
-        .stat-card {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .project-card:hover .project-overlay {
-            opacity: 1;
-        }
-        .modal { display: none; }
-        .modal.active { display: flex; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+        .gradient-overlay { background: linear-gradient(135deg, rgba(9,81,76,0.9) 0%, rgba(17,164,158,0.8) 100%); }
+        .stat-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
         .ticket-input { -moz-appearance: textfield; }
         .ticket-input::-webkit-outer-spin-button,
         .ticket-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="font-sans text-gray-800 bg-cream">
+<body class="font-sans text-gray-800 bg-cream" x-data="urborApp()">
 
-    <!-- Navigation -->
-    <nav class="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-50 transition-all duration-300" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center gap-3">
-                    <img src="content/images/URBOR.png" alt="Urbor" class="h-10 w-auto">
-                    <span class="text-2xl font-bold text-primary"></span>
-                </div>
+<!-- ===================== NAVIGATION ===================== -->
+<nav class="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+            <div class="flex items-center gap-3">
+                <img src="content/images/URBOR.png" alt="Urbor" class="h-10 w-auto">
+            </div>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#home" class="text-gray-700 hover:text-primary font-medium transition">Home</a>
+                <a href="#about" class="text-gray-700 hover:text-primary font-medium transition">About</a>
+                <a href="#projects" class="text-gray-700 hover:text-primary font-medium transition">Past Projects</a>
+                <a href="#current-project" class="text-gray-700 hover:text-primary font-medium transition">Current Project</a>
+                <a href="#team" class="text-gray-700 hover:text-primary font-medium transition">Team</a>
+                <a href="#contact" class="text-gray-700 hover:text-primary font-medium transition">Contact</a>
                 
-                <div class="hidden md:flex items-center gap-8">
-                    <a href="#home" class="text-gray-700 hover:text-primary font-medium transition">Home</a>
-                    <a href="#about" class="text-gray-700 hover:text-primary font-medium transition">About</a>
-                    <a href="#projects" class="text-gray-700 hover:text-primary font-medium transition">Past Projects</a>
-                    <a href="#current-project" class="text-gray-700 hover:text-primary font-medium transition">Current Project</a>
-                    <a href="#team" class="text-gray-700 hover:text-primary font-medium transition">Team</a>
-                    <a href="#contact" class="text-gray-700 hover:text-primary font-medium transition">Contact</a>
-                    <button onclick="toggleCart()" class="relative bg-primary text-white px-6 py-2.5 rounded-full font-medium hover:bg-secondary transition flex items-center gap-2">
-                        <i class="fas fa-shopping-cart"></i>
-                        Cart
-                        <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
-                    </button>
-                    <a href="/dev.html" class="bg-accent text-white px-6 py-2.5 rounded-full font-medium hover:bg-light transition">Farman</a>
-                </div>
-                
-                <button class="md:hidden text-2xl text-primary" onclick="toggleMobileMenu()">
-                    <i class="fas fa-bars"></i>
+                <button @click="cartOpen = true" class="relative bg-primary text-white px-6 py-2.5 rounded-full font-medium hover:bg-secondary transition flex items-center gap-2">
+                    <i class="fas fa-shopping-cart"></i>
+                    Cart
+                    <span x-show="cartCount > 0" x-text="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold"></span>
                 </button>
+                <a href="/dev.html" class="bg-accent text-white px-6 py-2.5 rounded-full font-medium hover:bg-light transition">Farman</a>
             </div>
+            <button class="md:hidden text-2xl text-primary" @click="mobileMenuOpen = !mobileMenuOpen">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
-        
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
-            <div class="px-4 py-3 space-y-3">
-                <a href="#home" class="block text-gray-700 hover:text-primary">Home</a>
-                <a href="#about" class="block text-gray-700 hover:text-primary">About</a>
-                <a href="#projects" class="block text-gray-700 hover:text-primary">Past Projects</a>
-                <a href="#current-project" class="block text-primary font-medium">Current Project</a>
-                <a href="#team" class="block text-gray-700 hover:text-primary">Team</a>
-                <a href="#contact" class="block text-gray-700 hover:text-primary">Contact</a>
-            </div>
+    </div>
+    <!-- Mobile Menu -->
+    <div x-show="mobileMenuOpen" x-cloak class="md:hidden bg-white border-t">
+        <div class="px-4 py-3 space-y-3">
+            <a href="#home" @click="mobileMenuOpen = false" class="block text-gray-700 hover:text-primary">Home</a>
+            <a href="#about" @click="mobileMenuOpen = false" class="block text-gray-700 hover:text-primary">About</a>
+            <a href="#projects" @click="mobileMenuOpen = false" class="block text-gray-700 hover:text-primary">Past Projects</a>
+            <a href="#current-project" @click="mobileMenuOpen = false" class="block text-primary font-medium">Current Project</a>
+            <a href="#team" @click="mobileMenuOpen = false" class="block text-gray-700 hover:text-primary">Team</a>
+            <a href="#contact" @click="mobileMenuOpen = false" class="block text-gray-700 hover:text-primary">Contact</a>
+            <button @click="cartOpen = true; mobileMenuOpen = false" class="flex items-center gap-2 text-primary font-medium">
+                <i class="fas fa-shopping-cart"></i> Cart (<span x-text="cartCount"></span>)
+            </button>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <img src="/content/images/Screenshot\ 2026-01-13\ 030949.png" alt="Agriculture" class="w-full h-full object-cover">
-            <div class="gradient-overlay absolute inset-0"></div>
+<!-- ===================== HERO ===================== -->
+<section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <img src="content/images/Screenshot 2026-01-13 030949.png" alt="Agriculture" class="w-full h-full object-cover">
+        <div class="gradient-overlay absolute inset-0"></div>
+    </div>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center text-white">
+        <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+            Empowering Agriculture<br>Through <span class="text-secondary">Ethical Finance</span>
+        </h1>
+        <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto opacity-95">
+            We bridge urban capital with agricultural communities through sustainable, zero-risk, profit-sharing financing solutions.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="#current-project" class="bg-white text-primary px-8 py-4 rounded-full font-semibold text-lg hover:bg-cream transition shadow-lg">
+                Invest Now <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+            <a href="#projects" class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-primary transition">
+                View Projects
+            </a>
         </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-20 max-w-4xl mx-auto">
+            <div class="stat-card rounded-2xl p-6 text-center">
+                <div class="text-3xl font-bold text-white mb-1">10+</div>
+                <div class="text-sm opacity-90">Members</div>
+            </div>
+            <div class="stat-card rounded-2xl p-6 text-center">
+                <div class="text-3xl font-bold text-white mb-1">10+</div>
+                <div class="text-sm opacity-90">Farmers Empowered</div>
+            </div>
+            <div class="stat-card rounded-2xl p-6 text-center">
+                <div class="text-3xl font-bold text-white mb-1">৳15,00,000+</div>
+                <div class="text-sm opacity-90">Taka Financing</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== ABOUT ===================== -->
+<section id="about" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Our Mission</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Strategically moving urban capital into agriculture with transparency and impact</p>
+        </div>
+        <div class="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl p-8 shadow-lg">
+            <div class="flex flex-col md:flex-row gap-6 items-start">
+                <div class="bg-primary/10 p-4 rounded-xl flex-shrink-0">
+                    <i class="fas fa-bullseye text-2xl text-primary"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-primary mb-3">Ethical Agricultural Financing</h3>
+                    <p class="text-gray-600 mb-4">
+                        We provide farmers with <span class="text-secondary font-medium">zero-risk, profit-sharing finance</span> and transform farming into a stable, investable industry for sustainable community growth.
+                    </p>
+                    <p class="text-gray-600 text-sm">
+                        Our approach combines traditional Islamic finance principles with modern agricultural technology to create sustainable value chains that benefit both investors and farming communities.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== PAST PROJECTS (REDESIGNED) ===================== -->
+<section id="projects" class="py-24 bg-gradient-to-b from-cream via-white to-cream">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center text-white">
-            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight animate-fade-in">
-                Empowering Agriculture<br>Through <span class="text-secondary">Ethical Finance</span>
-            </h1>
-            <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto opacity-95 animate-fade-in" style="animation-delay: 0.2s">
-                We bridge urban capital with agricultural communities through sustainable, zero-risk, profit-sharing financing solutions.
+        <!-- Section Header -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary/10 text-primary uppercase tracking-wider mb-4">
+                <i class="fas fa-history text-xs"></i> Proven Track Record
+            </span>
+            <h2 class="text-3xl md:text-5xl font-extrabold text-primary tracking-tight mb-4">
+                Our Past Projects
+            </h2>
+            <p class="text-gray-600 text-base md:text-lg leading-relaxed">
+                Discover how our Shariah-compliant financing models have empowered smallholder farmers and driven sustainable agricultural growth across Bangladesh.
             </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style="animation-delay: 0.4s">
-                <a href="#current-project" class="bg-white text-primary px-8 py-4 rounded-full font-semibold text-lg hover:bg-cream transition shadow-lg">
-                    Invest Now <i class="fas fa-arrow-right ml-2"></i>
-                </a>
-                <a href="#projects" class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-primary transition">
-                    View Projects
-                </a>
-            </div>
-            
-            <!-- Stats Overlay -->
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-20 max-w-4xl mx-auto">
-                <div class="stat-card rounded-2xl p-6 text-center">
-                    <div class="text-3xl font-bold text-white mb-1 counter" data-count="10">0</div>
-                    <div class="text-sm opacity-90">Members</div>
-                </div>
-                <div class="stat-card rounded-2xl p-6 text-center">
-                    <div class="text-3xl font-bold text-white mb-1 counter" data-count="10">0</div>
-                    <div class="text-sm opacity-90">Farmers Empowered</div>
-                </div>
-                <div class="stat-card rounded-2xl p-6 text-center">
-                    <div class="text-3xl font-bold text-white mb-1 counter" data-count="1500000">0</div>
-                    <div class="text-sm opacity-90">Taka Financing</div>
-                </div>
-            </div>
         </div>
-    </section>
 
-    <!-- Mission Section -->
-    <section id="about" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Our Mission</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Strategically moving urban capital into agriculture with transparency and impact</p>
-            </div>
-            <div class="max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl p-8 shadow-lg">
-                <div class="flex flex-col md:flex-row gap-6 items-start">
-                    <div class="bg-primary/10 p-4 rounded-xl flex-shrink-0">
-                        <i class="fas fa-bullseye text-2xl text-primary"></i>
+        <!-- Project Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <template x-for="p in pastProjects" :key="p.title">
+                <div @click="openModal(p)" 
+                     class="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden cursor-pointer transform hover:-translate-y-1.5">
+                    
+                    <!-- Thumbnail Image Container -->
+                    <div class="relative h-60 w-full overflow-hidden bg-gray-100">
+                        <img :src="p.image" :alt="p.title" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+                        
+                        <!-- Gradient Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity"></div>
+                        
+                        <!-- Status Badge -->
+                        <div class="absolute top-4 left-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/90 text-white backdrop-blur-md shadow-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                                Completed
+                            </span>
+                        </div>
+
+                        <!-- Category Badge -->
+                        <div class="absolute top-4 right-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-white/90 backdrop-blur-md text-primary shadow-sm" x-text="p.category"></span>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-primary mb-3">Ethical Agricultural Financing</h3>
-                        <p class="text-gray-600 mb-4">
-                            We provide farmers with <span class="text-secondary font-medium">zero-risk, profit-sharing finance</span> and transform farming into a stable, investable industry for sustainable community growth.
-                        </p>
-                        <p class="text-gray-600 text-sm">
-                            Our approach combines traditional Islamic finance principles with modern agricultural technology to create sustainable value chains that benefit both investors and farming communities. We focus on transparency, ethical returns, and measurable social impact.
-                        </p>
+
+                    <!-- Card Body -->
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors duration-200 mb-2" x-text="p.title"></h3>
+                            <p class="text-gray-600 text-sm line-clamp-2 leading-relaxed mb-6" x-text="p.desc"></p>
+                        </div>
+
+                        <!-- Card Footer Action -->
+                        <div class="pt-4 border-t border-gray-100 flex items-center justify-between text-xs font-semibold text-primary">
+                            <span class="inline-flex items-center gap-1">
+                                <i class="fas fa-shield-alt text-accent"></i> Shariah Compliant
+                            </span>
+                            <span class="inline-flex items-center gap-1 text-secondary group-hover:translate-x-1 transition-transform duration-200">
+                                View Details <i class="fas fa-arrow-right"></i>
+                            </span>
+                        </div>
                     </div>
+
                 </div>
-            </div>
+            </template>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Past Projects Section (6 Projects) -->
-    <section id="projects" class="py-20 bg-cream">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Past Projects</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">See how our ethical financing is transforming agricultural communities across Bangladesh</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project 1: Maize -->
-                <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden card-hover cursor-pointer" onclick="openProjectModal('Maize Pilot Project', 'Sustainable maize cultivation with modern techniques', 'content/images/1-Maize-Pilot-Project.png')">
-                    <div class="relative h-64 overflow-hidden">
-                        <img src="content/images/1-Maize-Pilot-Project.png" alt="Maize Pilot Project" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                            <div class="text-white transform translate-y-4 hover:translate-y-0 transition-transform duration-300">
-                                <h4 class="font-bold text-xl mb-2">Maize Pilot Project</h4>
-                                <p class="text-sm opacity-95">Sustainable maize cultivation with modern techniques</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Project 2: Mixed Vegetable -->
-                <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden card-hover cursor-pointer" onclick="openProjectModal('Mixed Vegetable Project', 'Diverse vegetable cultivation for market stability', 'content/images/2-Mixed-Vegetable-Pilot-Project.png')">
-                    <div class="relative h-64 overflow-hidden">
-                        <img src="content/images/2-Mixed-Vegetable-Pilot-Project.png" alt="Mixed Vegetable Project" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                            <div class="text-white transform translate-y-4 hover:translate-y-0 transition-transform duration-300">
-                                <h4 class="font-bold text-xl mb-2">Mixed Vegetable Project</h4>
-                                <p class="text-sm opacity-95">Diverse vegetable cultivation for market stability</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Project 3: Cattle -->
-                <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden card-hover cursor-pointer" onclick="openProjectModal('Cattle Project', 'Livestock development for sustainable farming', 'content/images/3-Cattle-Project.png')">
-                    <div class="relative h-64 overflow-hidden">
-                        <img src="content/images/3-Cattle-Project.png" alt="Cattle Project" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                            <div class="text-white transform translate-y-4 hover:translate-y-0 transition-transform duration-300">
-                                <h4 class="font-bold text-xl mb-2">Cattle Project</h4>
-                                <p class="text-sm opacity-95">Livestock development for sustainable farming</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Project 4: Duck -->
-                <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden card-hover cursor-pointer" onclick="openProjectModal('Duck Farming Project', 'Poultry diversification for increased income', 'content/images/4-Duck-(Meat)-Pilot-Project.png')">
-                    <div class="relative h-64 overflow-hidden">
-                        <img src="content/images/4-Duck-(Meat)-Pilot-Project.png" alt="Duck Farming Project" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                            <div class="text-white transform translate-y-4 hover:translate-y-0 transition-transform duration-300">
-                                <h4 class="font-bold text-xl mb-2">Duck Farming Project</h4>
-                                <p class="text-sm opacity-95">Poultry diversification for increased income</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Project 5: Chicken Egg -->
-                <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden card-hover cursor-pointer" onclick="openProjectModal('Chicken Egg Project', 'Egg production with improved poultry breeds', 'content/images/5-Faomi-Chicken-(Egg)-Pilot-Project.png')">
-                    <div class="relative h-64 overflow-hidden">
-                        <img src="content/images/5-Faomi-Chicken-(Egg)-Pilot-Project.png" alt="Chicken Egg Project" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                            <div class="text-white transform translate-y-4 hover:translate-y-0 transition-transform duration-300">
-                                <h4 class="font-bold text-xl mb-2">Chicken Egg Project</h4>
-                                <p class="text-sm opacity-95">Egg production with improved poultry breeds</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Project 6: Goat -->
-                <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden card-hover cursor-pointer" onclick="openProjectModal('Goat Project', 'Goat rearing for sustainable livestock income', 'content/images/6-Goat-Project---1.png')">
-                    <div class="relative h-64 overflow-hidden">
-                        <img src="content/images/6-Goat-Project---1.png" alt="Goat Project" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                            <div class="text-white transform translate-y-4 hover:translate-y-0 transition-transform duration-300">
-                                <h4 class="font-bold text-xl mb-2">Goat Project</h4>
-                                <p class="text-sm opacity-95">Goat rearing for sustainable livestock income</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-<!-- Current Project Section (3 Horizontal Cards with Images) -->
+<!-- ===================== CURRENT PROJECTS ===================== -->
 <section id="current-project" class="py-20 bg-gradient-to-br from-primary to-secondary text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <div class="inline-block bg-white/20 backdrop-blur px-4 py-1 rounded-full text-sm font-semibold mb-4">Live Investment Opportunity</div>
             <h2 class="text-3xl md:text-4xl font-bold mb-4">Current Project</h2>
-            <p class="text-white/90 max-w-2xl mx-auto">Invest in ethical agriculture. Each ticket represents a share in the project's output with Shariah-compliant returns.</p>
+            <p class="text-white/90 max-w-2xl mx-auto">Select tickets from our active project. Each ticket = ৳1,00,000 share.</p>
         </div>
-        
-        <div class="grid lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            <!-- Card 1 -->
-            <div class="bg-white rounded-2xl overflow-hidden shadow-xl">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="content/images/5-Faomi-Chicken-(Egg)-Pilot-Project.png" alt="Chicken Project" class="w-full h-full object-cover">
-                    <div class="absolute top-3 left-3">
-                        <span class="bg-green-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">Available</span>
-                    </div>
-                    <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-lg text-xs font-semibold text-primary">
-                        24/50 sold
-                    </div>
+
+        <div class="max-w-lg mx-auto">
+            <!-- Goat Project Card -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-xl text-gray-800">
+                <div class="relative h-56 overflow-hidden">
+                    <img src="content/images/6-Goat-Project---1.png" alt="Goat Project" class="w-full h-full object-cover">
+                    <div class="absolute top-3 left-3"><span class="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">Available</span></div>
+                    <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2.5 py-1 rounded-lg text-xs font-semibold text-primary">12/30 sold</div>
                 </div>
                 <div class="p-6">
-                    <h3 class="text-xl font-bold text-primary mb-2">Chicken Project 2</h3>
-                    <p class="text-gray-600 text-sm mb-4">Sustainable poultry farming with Faomi breeds.</p>
+                    <h3 class="text-2xl font-bold text-primary mb-1">Goat Rearing Project</h3>
+                    <p class="text-gray-500 text-xs font-medium mb-3 uppercase tracking-wide">Batch 1 — Active</p>
+                    <p class="text-gray-600 text-sm mb-4">Sustainable goat rearing for high-yield livestock income and community growth.</p>
                     
-                    <div class="grid grid-cols-2 gap-2 mb-4">
-                        <div class="bg-cream rounded-lg p-2 text-center">
-                            <div class="text-xs text-gray-600">Ticket</div>
-                            <div class="text-base font-bold text-primary">৳1L</div>
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <div class="bg-cream rounded-xl p-3 text-center border">
+                            <div class="text-xs text-gray-500">Per Ticket</div>
+                            <div class="text-lg font-bold text-primary">৳1,00,000</div>
                         </div>
-                        <div class="bg-cream rounded-lg p-2 text-center">
-                            <div class="text-xs text-gray-600">Return</div>
-                            <div class="text-base font-bold text-primary">12-18%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <label class="block text-xs font-medium text-gray-700 mb-2">Tickets</label>
-                        <div class="flex items-center justify-center gap-2">
-                            <button onclick="changeTickets(1, -1)" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-lg font-bold text-primary transition">−</button>
-                            <input type="number" id="tickets1" class="ticket-input w-14 text-center text-lg font-bold text-primary border-2 border-gray-200 rounded-lg py-1.5 focus:ring-2 focus:ring-secondary outline-none" value="1" min="1" max="26" onchange="updateCardTotal(1)">
-                            <button onclick="changeTickets(1, 1)" class="w-10 h-10 rounded-full bg-primary hover:bg-secondary flex items-center justify-center text-lg font-bold text-white transition">+</button>
+                        <div class="bg-cream rounded-xl p-3 text-center border">
+                            <div class="text-xs text-gray-500">Expected Return</div>
+                            <div class="text-lg font-bold text-primary">14–20%</div>
                         </div>
                     </div>
-                    
-                    <div class="flex items-center justify-between pt-3 border-t border-gray-200">
+
+                    <div class="mb-6">
+                        <label class="block text-xs font-semibold text-gray-700 mb-2 text-center uppercase tracking-wider">Number of Tickets</label>
+                        <div class="flex items-center justify-center gap-3">
+                            <button @click="goatQty = Math.max(1, goatQty - 1)" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-lg font-bold text-primary transition">−</button>
+                            <input type="number" x-model.number="goatQty" min="1" max="18" class="ticket-input w-16 text-center text-xl font-bold text-primary border-2 border-gray-200 rounded-lg py-1.5 focus:ring-2 focus:ring-secondary outline-none">
+                            <button @click="goatQty = Math.min(18, goatQty + 1)" class="w-10 h-10 rounded-full bg-primary hover:bg-secondary flex items-center justify-center text-lg font-bold text-white transition">+</button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-200">
                         <div>
-                            <div class="text-xs text-gray-600">Total</div>
-                            <div id="total1" class="text-lg font-bold text-primary">৳1,00,000</div>
+                            <div class="text-xs text-gray-500">Total Investment</div>
+                            <div class="text-xl font-extrabold text-primary" x-text="formatCurrency(goatQty * 100000)"></div>
                         </div>
-                        <button onclick="addToCartFromCard(1)" class="bg-primary text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-secondary transition">Add</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Card 2 -->
-            <div class="bg-white rounded-2xl overflow-hidden shadow-xl">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="content/images/5-Faomi-Chicken-(Egg)-Pilot-Project.png" alt="Chicken Project" class="w-full h-full object-cover">
-                    <div class="absolute top-3 left-3">
-                        <span class="bg-green-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">Available</span>
-                    </div>
-                    <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-lg text-xs font-semibold text-primary">
-                        24/50 sold
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-primary mb-2">Chicken Project 2</h3>
-                    <p class="text-gray-600 text-sm mb-4">Sustainable poultry farming with Faomi breeds.</p>
-                    
-                    <div class="grid grid-cols-2 gap-2 mb-4">
-                        <div class="bg-cream rounded-lg p-2 text-center">
-                            <div class="text-xs text-gray-600">Ticket</div>
-                            <div class="text-base font-bold text-primary">৳1L</div>
-                        </div>
-                        <div class="bg-cream rounded-lg p-2 text-center">
-                            <div class="text-xs text-gray-600">Return</div>
-                            <div class="text-base font-bold text-primary">12-18%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <label class="block text-xs font-medium text-gray-700 mb-2">Tickets</label>
-                        <div class="flex items-center justify-center gap-2">
-                            <button onclick="changeTickets(2, -1)" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-lg font-bold text-primary transition">−</button>
-                            <input type="number" id="tickets2" class="ticket-input w-14 text-center text-lg font-bold text-primary border-2 border-gray-200 rounded-lg py-1.5 focus:ring-2 focus:ring-secondary outline-none" value="1" min="1" max="26" onchange="updateCardTotal(2)">
-                            <button onclick="changeTickets(2, 1)" class="w-10 h-10 rounded-full bg-primary hover:bg-secondary flex items-center justify-center text-lg font-bold text-white transition">+</button>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center justify-between pt-3 border-t border-gray-200">
-                        <div>
-                            <div class="text-xs text-gray-600">Total</div>
-                            <div id="total2" class="text-lg font-bold text-primary">৳1,00,000</div>
-                        </div>
-                        <button onclick="addToCartFromCard(2)" class="bg-primary text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-secondary transition">Add</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Card 3 -->
-            <div class="bg-white rounded-2xl overflow-hidden shadow-xl">
-                <div class="relative h-48 overflow-hidden">
-                    <img src="content/images/5-Faomi-Chicken-(Egg)-Pilot-Project.png" alt="Chicken Project" class="w-full h-full object-cover">
-                    <div class="absolute top-3 left-3">
-                        <span class="bg-green-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">Available</span>
-                    </div>
-                    <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-lg text-xs font-semibold text-primary">
-                        24/50 sold
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-primary mb-2">Chicken Project 2</h3>
-                    <p class="text-gray-600 text-sm mb-4">Sustainable poultry farming with Faomi breeds.</p>
-                    
-                    <div class="grid grid-cols-2 gap-2 mb-4">
-                        <div class="bg-cream rounded-lg p-2 text-center">
-                            <div class="text-xs text-gray-600">Ticket</div>
-                            <div class="text-base font-bold text-primary">৳1L</div>
-                        </div>
-                        <div class="bg-cream rounded-lg p-2 text-center">
-                            <div class="text-xs text-gray-600">Return</div>
-                            <div class="text-base font-bold text-primary">12-18%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <label class="block text-xs font-medium text-gray-700 mb-2">Tickets</label>
-                        <div class="flex items-center justify-center gap-2">
-                            <button onclick="changeTickets(3, -1)" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-lg font-bold text-primary transition">−</button>
-                            <input type="number" id="tickets3" class="ticket-input w-14 text-center text-lg font-bold text-primary border-2 border-gray-200 rounded-lg py-1.5 focus:ring-2 focus:ring-secondary outline-none" value="1" min="1" max="26" onchange="updateCardTotal(3)">
-                            <button onclick="changeTickets(3, 1)" class="w-10 h-10 rounded-full bg-primary hover:bg-secondary flex items-center justify-center text-lg font-bold text-white transition">+</button>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center justify-between pt-3 border-t border-gray-200">
-                        <div>
-                            <div class="text-xs text-gray-600">Total</div>
-                            <div id="total3" class="text-lg font-bold text-primary">৳1,00,000</div>
-                        </div>
-                        <button onclick="addToCartFromCard(3)" class="bg-primary text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-secondary transition">Add</button>
+                        <button @click="addToCart('Goat Rearing Project', goatQty, 100000)" class="bg-primary text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-secondary transition flex items-center gap-2 shadow-md">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
                     </div>
                 </div>
             </div>
@@ -416,309 +273,297 @@
     </div>
 </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-gradient-to-br from-primary to-secondary text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Get in Touch</h2>
-                <p class="text-white/90 max-w-2xl mx-auto">Partner with us to transform agriculture through ethical financing.</p>
-            </div>
-            
-            <div class="max-w-md mx-auto bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8">
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <i class="fas fa-envelope text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Join Our Mission</h3>
-                    <p class="text-white/90 text-sm">Get in touch to learn more about investment opportunities.</p>
-                </div>
-                
-                <a href="mailto:info.urbor@gmail.com" class="block bg-white text-primary py-3 px-6 rounded-xl font-semibold text-center hover:bg-cream transition">
-                    <i class="fas fa-envelope mr-2"></i> info.urbor@gmail.com
-                </a>
-                <p class="text-center text-xs text-white/80 mt-3">
-                    <i class="fas fa-clock mr-1"></i> Typically respond within 24 hours
-                </p>
-            </div>
+<!-- ===================== TEAM ===================== -->
+<section id="team" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Our Team</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Meet the dedicated professionals driving Urbor's mission to transform agriculture.</p>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-primary text-white pt-12 pb-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-3 gap-8 mb-8">
-                <div>
-                    <div class="flex items-center gap-2 mb-3">
-                        <img src="content/images/URBOR.png" alt="Urbor" class="h-8">
-                        <span class="font-bold"></span>
-                    </div>
-                    <p class="text-white/80 text-sm mb-3">Shariah-compliant agricultural financing empowering underserved communities.</p>
-                    <a href="https://www.facebook.com/share/1CxGKqmzDp/" class="text-white/70 hover:text-white transition">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                </div>
-                <div>
-                    <h4 class="font-bold text-sm mb-3">Quick Links</h4>
-                    <ul class="space-y-1.5 text-sm">
-                        <li><a href="#home" class="text-white/70 hover:text-white">Home</a></li>
-                        <li><a href="#about" class="text-white/70 hover:text-white">About</a></li>
-                        <li><a href="#projects" class="text-white/70 hover:text-white">Past Projects</a></li>
-                        <li><a href="#current-project" class="text-white/70 hover:text-white">Current Project</a></li>
-                        <li><a href="#team" class="text-white/70 hover:text-white">Team</a></li>
-                        <li><a href="#contact" class="text-white/70 hover:text-white">Contact</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold text-sm mb-3">Contact</h4>
-                    <div class="space-y-2 text-sm">
-                        <a href="mailto:info.urbor@gmail.com" class="text-white/70 hover:text-white block">
-                            <i class="fas fa-envelope mr-2"></i>info.urbor@gmail.com
-                        </a>
-                        <p class="text-white/70">
-                            <i class="fas fa-map-marker-alt mr-2"></i>481/4-A, North Ibrahimpur, Kafrul, Dhaka
-                        </p>
-                        <p class="text-white/70"><i class="fas fa-handshake mr-2"></i>Open to partnerships</p>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-white/15 pt-4 text-center text-xs text-white/60">
-                <p>&copy; 2026 Urbor. All rights reserved.</p>
-                <p class="mt-1">Shariah-Compliant • Ethical Financing • Sustainable Agriculture</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Project Modal -->
-    <div id="projectModal" class="modal fixed inset-0 z-50 items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="p-5 border-b border-gray-100 flex justify-between items-center">
-                <h3 id="modalTitle" class="text-xl font-bold text-primary"></h3>
-                <button onclick="closeProjectModal()" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="p-5">
-                <img id="modalImage" src="" alt="" class="w-full h-48 object-cover rounded-xl mb-4">
-                <p id="modalDesc" class="text-gray-600"></p>
-            </div>
+        <div class="text-center text-gray-500 italic">
+            <p>Team profiles coming soon.</p>
         </div>
     </div>
+</section>
 
-    <!-- Cart Modal -->
-    <div id="cartModal" class="modal fixed inset-0 z-50 items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="p-5 border-b border-gray-100 flex justify-between items-center">
-                <h3 class="text-xl font-bold text-primary">Your Cart</h3>
-                <button onclick="toggleCart()" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div id="cartContent" class="p-5">
-                <p class="text-center text-gray-600 py-6">Your cart is empty</p>
-            </div>
-            
-            <div id="checkoutForm" class="hidden p-5 border-t border-gray-100">
-                <div class="bg-cream rounded-xl p-4 mb-5">
-                    <div class="flex justify-between text-sm mb-1">
-                        <span class="text-gray-600">Tickets:</span>
-                        <span id="cartTotalTickets" class="font-bold text-primary">0</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="font-semibold">Total:</span>
-                        <span id="cartTotalAmount" class="font-bold text-primary">৳0</span>
-                    </div>
+<!-- ===================== CONTACT ===================== -->
+<section id="contact" class="py-20 bg-gradient-to-br from-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Get in Touch</h2>
+            <p class="text-white/90 max-w-2xl mx-auto">Partner with us to transform agriculture through ethical financing.</p>
+        </div>
+        <div class="max-w-md mx-auto bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-envelope text-2xl"></i>
                 </div>
-                
-                <form onsubmit="submitOrder(event)">
-                    <input type="text" id="fullName" placeholder="Full Name *" required class="w-full px-4 py-2.5 rounded-lg border border-gray-200 mb-3 focus:ring-2 focus:ring-secondary outline-none">
-                    <input type="tel" id="phone" placeholder="Phone Number *" pattern="[0-9]{11}" required class="w-full px-4 py-2.5 rounded-lg border border-gray-200 mb-3 focus:ring-2 focus:ring-secondary outline-none">
-                    <input type="email" id="email" placeholder="Email Address *" required class="w-full px-4 py-2.5 rounded-lg border border-gray-200 mb-3 focus:ring-2 focus:ring-secondary outline-none">
-                    <input type="tel" id="whatsapp" placeholder="WhatsApp Number *" pattern="[0-9]{11}" required class="w-full px-4 py-2.5 rounded-lg border border-gray-200 mb-4 focus:ring-2 focus:ring-secondary outline-none">
-                    
-                    <div class="flex gap-2">
-                        <button type="button" onclick="clearCart()" class="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 font-medium hover:bg-gray-50">Clear</button>
-                        <button type="submit" class="flex-1 px-4 py-2.5 rounded-lg bg-primary text-white font-medium hover:bg-secondary transition">Submit</button>
-                    </div>
-                </form>
-                <div id="formMessage" class="hidden mt-3 p-2.5 rounded-lg text-sm"></div>
+                <h3 class="text-xl font-bold mb-2">Join Our Mission</h3>
+                <p class="text-white/90 text-sm">Get in touch to learn more about investment opportunities.</p>
             </div>
+            <a href="mailto:info.urbor@gmail.com" class="block bg-white text-primary py-3 px-6 rounded-xl font-semibold text-center hover:bg-cream transition">
+                <i class="fas fa-envelope mr-2"></i> info.urbor@gmail.com
+            </a>
+            <p class="text-center text-xs text-white/80 mt-3"><i class="fas fa-clock mr-1"></i> Typically respond within 24 hours</p>
         </div>
     </div>
+</section>
 
-    <!-- Toast -->
-    <div id="toast" class="fixed top-4 right-4 bg-primary text-white px-5 py-3 rounded-xl shadow-lg transform translate-x-full transition-transform duration-300 z-50 flex items-center gap-2">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Success!</span>
+<!-- ===================== FOOTER ===================== -->
+<footer class="bg-primary text-white pt-12 pb-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+                <div class="flex items-center gap-2 mb-3">
+                    <img src="content/images/URBOR.png" alt="Urbor" class="h-8">
+                </div>
+                <p class="text-white/80 text-sm mb-3">Shariah-compliant agricultural financing empowering underserved communities.</p>
+                <a href="https://web.facebook.com/Urbor.Agritech" target="_blank" class="text-white/70 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+            </div>
+            <div>
+                <h4 class="font-bold text-sm mb-3">Quick Links</h4>
+                <ul class="space-y-1.5 text-sm">
+                    <li><a href="#home" class="text-white/70 hover:text-white">Home</a></li>
+                    <li><a href="#about" class="text-white/70 hover:text-white">About</a></li>
+                    <li><a href="#projects" class="text-white/70 hover:text-white">Past Projects</a></li>
+                    <li><a href="#current-project" class="text-white/70 hover:text-white">Current Project</a></li>
+                    <li><a href="#contact" class="text-white/70 hover:text-white">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-sm mb-3">Contact</h4>
+                <div class="space-y-2 text-sm">
+                    <a href="mailto:info.urbor@gmail.com" class="text-white/70 hover:text-white block"><i class="fas fa-envelope mr-2"></i>info.urbor@gmail.com</a>
+                    <p class="text-white/70"><i class="fas fa-map-marker-alt mr-2"></i>481/4-A, North Ibrahimpur, Kafrul, Dhaka</p>
+                    <p class="text-white/70"><i class="fas fa-handshake mr-2"></i>Open to partnerships</p>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-white/15 pt-4 text-center text-xs text-white/60">
+            <p>&copy; 2026 Urbor. All rights reserved.</p>
+            <p class="mt-1">Shariah-Compliant • Ethical Financing • Sustainable Agriculture</p>
+        </div>
     </div>
+</footer>
 
-    <script>
-        // ===== Cart State =====
-        const TICKET_PRICE = 100000;
-        let cart = { project: 'Chicken Project 2', tickets: 0 };
-
-        // ===== Mobile Menu =====
-        function toggleMobileMenu() {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
-        }
-
-        // ===== Ticket Functions for 3 Cards =====
-        function changeTickets(cardNum, delta) {
-            const input = document.getElementById('tickets' + cardNum);
-            let val = parseInt(input.value) || 1;
-            val = Math.max(1, Math.min(26, val + delta));
-            input.value = val;
-            updateCardTotal(cardNum);
-        }
-
-        function updateCardTotal(cardNum) {
-            const tickets = parseInt(document.getElementById('tickets' + cardNum).value) || 1;
-            document.getElementById('total' + cardNum).textContent = '৳' + (tickets * TICKET_PRICE).toLocaleString('en-BD');
-            return tickets;
-        }
-
-        function addToCartFromCard(cardNum) {
-            cart.tickets = updateCardTotal(cardNum);
-            toggleCart();
-            renderCart();
-        }
-
-        // ===== Cart Functions =====
-        function toggleCart() {
-            const modal = document.getElementById('cartModal');
-            modal.classList.toggle('active');
-            if (modal.classList.contains('active')) renderCart();
-        }
-
-        function renderCart() {
-            const content = document.getElementById('cartContent');
-            const form = document.getElementById('checkoutForm');
-            const badge = document.getElementById('cartCount');
-            
-            if (cart.tickets > 0) {
-                const total = cart.tickets * TICKET_PRICE;
-                content.innerHTML = `
-                    <div class="bg-cream rounded-xl p-4 mb-4">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <div class="font-bold text-primary">${cart.project}</div>
-                                <div class="text-sm text-gray-600">${cart.tickets} ticket${cart.tickets>1?'s':''} × ৳${TICKET_PRICE.toLocaleString('en-BD')}</div>
-                            </div>
-                            <div class="text-lg font-bold text-primary">৳${total.toLocaleString('en-BD')}</div>
-                        </div>
-                    </div>
-                `;
-                form.classList.remove('hidden');
-                document.getElementById('cartTotalTickets').textContent = cart.tickets;
-                document.getElementById('cartTotalAmount').textContent = '৳' + total.toLocaleString('en-BD');
-                badge.textContent = cart.tickets;
-                badge.classList.remove('hidden');
-            } else {
-                content.innerHTML = '<p class="text-center text-gray-600 py-6">Your cart is empty</p>';
-                form.classList.add('hidden');
-                badge.classList.add('hidden');
-            }
-        }
-
-        function clearCart() {
-            cart.tickets = 0;
-            ['tickets1','tickets2','tickets3'].forEach(id => document.getElementById(id).value = 1);
-            [1,2,3].forEach(updateCardTotal);
-            renderCart();
-            showToast('Cart cleared');
-        }
-
-        // ===== Project Modal =====
-        function openProjectModal(title, desc, img) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalDesc').textContent = desc;
-            document.getElementById('modalImage').src = img;
-            document.getElementById('projectModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeProjectModal() {
-            document.getElementById('projectModal').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        // ===== Form Submission =====
-        async function submitOrder(e) {
-            e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            const orig = btn.innerHTML;
-            const msg = document.getElementById('formMessage');
-            
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            msg.classList.add('hidden');
-            
-            const data = {
-                project: cart.project,
-                tickets: cart.tickets,
-                amount: cart.tickets * TICKET_PRICE,
-                fullName: document.getElementById('fullName').value.trim(),
-                phone: document.getElementById('phone').value.trim(),
-                email: document.getElementById('email').value.trim(),
-                whatsapp: document.getElementById('whatsapp').value.trim(),
-                timestamp: new Date().toISOString()
-            };
-            
-            // ⚠️ REPLACE WITH YOUR WEB APP URL
-            const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyrQ_9o5IoV68yOqrOfE65UGux9MMYH5BfpLKJ60bzv8ob4v9PDuhZWdqFbr30n5wNDng/exec';
-            
-            try {
-                await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
-                    redirect: 'follow'
-                });
-                showToast('Order submitted! We\'ll contact you soon.');
-                e.target.reset();
-                clearCart();
-                toggleCart();
-            } catch(err) {
-                console.error(err);
-                msg.innerHTML = '⚠️ Failed. Email: <a href="mailto:info.urbor@gmail.com" class="underline">info.urbor@gmail.com</a>';
-                msg.className = 'mt-3 p-2.5 rounded-lg text-sm bg-red-50 text-red-700 block';
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = orig;
-            }
-        }
-
-        // ===== Toast =====
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            document.getElementById('toastMessage').textContent = msg;
-            t.classList.remove('translate-x-full');
-            setTimeout(() => t.classList.add('translate-x-full'), 3000);
-        }
-
-        // ===== Animated Counters =====
-        function animateCounters() {
-            document.querySelectorAll('.counter').forEach(el => {
-                const target = parseInt(el.dataset.count);
-                let cur = 0, inc = Math.ceil(target/50);
-                const tick = () => {
-                    cur += inc;
-                    if(cur >= target) { el.textContent = target.toLocaleString(); }
-                    else { el.textContent = cur.toLocaleString(); requestAnimationFrame(tick); }
-                };
-                tick();
-            });
-        }
+<!-- ===================== ENHANCED PROJECT MODAL ===================== -->
+<div x-show="activeModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
+    <div @click.away="activeModal = null" 
+         class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl transform transition-all">
         
-        // Intersection Observer for counters
-        const obs = new IntersectionObserver(entries => {
-            entries.forEach(e => {
-                if(e.isIntersecting) { animateCounters(); obs.unobserve(e.target); }
-            });
-        }, {threshold: 0.5});
-        document.querySelectorAll('.counter').forEach(c => obs.observe(c));
+        <!-- Modal Banner Image -->
+        <div class="relative h-64 bg-gray-100">
+            <img :src="activeModal?.image" :alt="activeModal?.title" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+            
+            <!-- Close Button -->
+            <button @click="activeModal = null" 
+                    class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/30 text-white backdrop-blur-md flex items-center justify-center hover:bg-black/50 transition-colors">
+                <i class="fas fa-times text-sm"></i>
+            </button>
 
-        // ===== Init =====
-        [1,2,3].forEach(updateCardTotal);
-    </script>
+            <!-- Modal Banner Title -->
+            <div class="absolute bottom-4 left-6 right-6 text-white">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500 text-white inline-block mb-2">
+                    Fully Disbursed & Returned
+                </span>
+                <h3 class="text-2xl font-bold leading-tight" x-text="activeModal?.title"></h3>
+            </div>
+        </div>
+
+        <!-- Modal Body Content -->
+        <div class="p-6 space-y-6">
+            <div>
+                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Project Overview</h4>
+                <p class="text-gray-700 text-sm leading-relaxed" x-text="activeModal?.desc"></p>
+            </div>
+
+            <!-- Highlights Grid -->
+            <div class="grid grid-cols-2 gap-4 bg-cream rounded-2xl p-4 border border-gray-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-hand-holding-usd text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="text-[11px] text-gray-500 font-medium">Model</div>
+                        <div class="text-xs font-bold text-primary">Profit-Sharing</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-accent/10 text-accent flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-check-circle text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="text-[11px] text-gray-500 font-medium">Status</div>
+                        <div class="text-xs font-bold text-gray-800">Completed</div>
+                    </div>
+                </div>
+            </div>
+
+            <button @click="activeModal = null" class="w-full bg-primary text-white py-3.5 rounded-xl font-semibold hover:bg-secondary transition-colors text-sm shadow-md">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== CART MODAL ===================== -->
+<div x-show="cartOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div @click.away="cartOpen = false" class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6">
+        <div class="flex justify-between items-center pb-4 border-b">
+            <h3 class="text-xl font-bold text-primary"><i class="fas fa-shopping-cart mr-2"></i> Your Investment Cart</h3>
+            <button @click="cartOpen = false" class="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+        </div>
+
+        <!-- Cart Items -->
+        <div class="py-4 space-y-3">
+            <template x-if="cart.length === 0">
+                <p class="text-center text-gray-500 py-6">Your cart is currently empty.</p>
+            </template>
+            <template x-for="(item, index) in cart" :key="index">
+                <div class="flex justify-between items-center bg-cream p-3 rounded-xl border">
+                    <div>
+                        <h4 class="font-bold text-primary text-sm" x-text="item.name"></h4>
+                        <p class="text-xs text-gray-500" x-text="item.qty + ' ticket(s) × ৳' + item.unitPrice.toLocaleString('en-IN')"></p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="font-bold text-primary text-sm" x-text="formatCurrency(item.total)"></span>
+                        <button @click="removeFromCart(index)" class="text-red-500 hover:text-red-700 text-xs"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <div x-show="cart.length > 0" class="border-t pt-4 space-y-4">
+            <div class="flex justify-between items-center text-lg font-bold text-primary">
+                <span>Total Amount:</span>
+                <span x-text="formatCurrency(cartTotal)"></span>
+            </div>
+
+            <!-- Checkout Form -->
+            <form @submit.prevent="submitOrder" class="space-y-3 text-sm">
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Full Name *</label>
+                    <input type="text" x-model="form.name" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Phone Number *</label>
+                    <input type="tel" x-model="form.phone" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Email Address</label>
+                    <input type="email" x-model="form.email" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Address</label>
+                    <textarea x-model="form.address" rows="2" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary outline-none"></textarea>
+                </div>
+
+                <button type="submit" :disabled="submitting" class="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-secondary transition flex items-center justify-center gap-2">
+                    <span x-show="!submitting">Confirm</span>
+                    <span x-show="submitting"><i class="fas fa-spinner fa-spin mr-1"></i> Processing...</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Alpine App Script -->
+<script>
+function urborApp() {
+    return {
+        mobileMenuOpen: false,
+        cartOpen: false,
+        activeModal: null,
+        goatQty: 1,
+        cart: [],
+        submitting: false,
+        
+        scriptUrl: 'https://script.google.com/macros/s/AKfycbxY5B5uacoV-KpuHmYqgSoO-fQbA5FdJ2nZ27lc116niw4OJRt-UVQmioaXaHBDkb34cg/exec',
+
+        form: {
+            name: '',
+            phone: '',
+            email: '',
+            address: ''
+        },
+
+        pastProjects: [
+            { title: 'Maize Pilot Project', category: 'Crops', desc: 'Sustainable maize cultivation leveraging modern precision agricultural techniques.', image: 'content/images/1-Maize-Pilot-Project.png' },
+            { title: 'Mixed Vegetable Project', category: 'Crops', desc: 'Diverse vegetable crop rotation ensuring continuous yield and market stability.', image: 'content/images/2-Mixed-Vegetable-Pilot-Project.png' },
+            { title: 'Cattle Project', category: 'Livestock', desc: 'Scientific cattle rearing and health management for sustainable meat production.', image: 'content/images/3-Cattle-Project.png' },
+            { title: 'Duck Farming Project', category: 'Poultry', desc: 'High-density poultry diversification designed for optimized smallholder returns.', image: 'content/images/4-Duck-(Meat)-Pilot-Project.png' },
+            { title: 'Chicken Egg Project', category: 'Poultry', desc: 'Commercial layer farming utilizing modern disease-control and nutrition standards.', image: 'content/images/5-Faomi-Chicken-(Egg)-Pilot-Project.png' },
+            { title: 'Goat Project', category: 'Livestock', desc: 'Zero-risk goat breeding and rearing optimized for community income generation.', image: 'content/images/6-Goat-Project---1.png' }
+        ],
+
+        get cartCount() {
+            return this.cart.reduce((sum, item) => sum + item.qty, 0);
+        },
+
+        get cartTotal() {
+            return this.cart.reduce((sum, item) => sum + item.total, 0);
+        },
+
+        formatCurrency(num) {
+            return '৳' + num.toLocaleString('en-IN');
+        },
+
+        openModal(project) {
+            this.activeModal = project;
+        },
+
+        addToCart(name, qty, unitPrice) {
+            const existing = this.cart.find(i => i.name === name);
+            if (existing) {
+                existing.qty += qty;
+                existing.total = existing.qty * unitPrice;
+            } else {
+                this.cart.push({
+                    name: name,
+                    qty: qty,
+                    unitPrice: unitPrice,
+                    total: qty * unitPrice
+                });
+            }
+            this.cartOpen = true;
+        },
+
+        removeFromCart(index) {
+            this.cart.splice(index, 1);
+        },
+
+        async submitOrder() {
+            if (this.cart.length === 0) return;
+            this.submitting = true;
+
+            const payload = {
+                ...this.form,
+                items: this.cart,
+                totalAmount: this.cartTotal
+            };
+
+            try {
+                const response = await fetch(this.scriptUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                alert('Thank you! Your investment request has been submitted successfully.');
+                this.cart = [];
+                this.form = { name: '', phone: '', email: '', address: '' };
+                this.cartOpen = false;
+            } catch (err) {
+                alert('Submission failed. Please try again or contact us directly.');
+                console.error(err);
+            } finally {
+                this.submitting = false;
+            }
+        }
+    }
+}
+</script>
 </body>
 </html>
