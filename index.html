@@ -32,8 +32,6 @@
     <style>
         html { scroll-behavior: smooth; }
         .gradient-overlay { background: linear-gradient(135deg, rgba(9,81,76,0.9) 0%, rgba(17,164,158,0.8) 100%); }
-        .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(9,81,76,0.15); }
         .stat-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
         .ticket-input { -moz-appearance: textfield; }
         .ticket-input::-webkit-outer-spin-button,
@@ -150,25 +148,68 @@
     </div>
 </section>
 
-<!-- ===================== PAST PROJECTS ===================== -->
-<section id="projects" class="py-20 bg-cream">
+<!-- ===================== PAST PROJECTS (REDESIGNED) ===================== -->
+<section id="projects" class="py-24 bg-gradient-to-b from-cream via-white to-cream">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Past Projects</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">See how our ethical financing is transforming agricultural communities across Bangladesh</p>
+        
+        <!-- Section Header -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary/10 text-primary uppercase tracking-wider mb-4">
+                <i class="fas fa-history text-xs"></i> Proven Track Record
+            </span>
+            <h2 class="text-3xl md:text-5xl font-extrabold text-primary tracking-tight mb-4">
+                Our Past Projects
+            </h2>
+            <p class="text-gray-600 text-base md:text-lg leading-relaxed">
+                Discover how our Shariah-compliant financing models have empowered smallholder farmers and driven sustainable agricultural growth across Bangladesh.
+            </p>
         </div>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <!-- Project Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <template x-for="p in pastProjects" :key="p.title">
-                <div class="project-card bg-white rounded-2xl shadow-lg overflow-hidden card-hover cursor-pointer" @click="openModal(p)">
-                    <div class="relative h-64 overflow-hidden">
-                        <img :src="p.image" :alt="p.title" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                            <div class="text-white">
-                                <h4 class="font-bold text-xl mb-1" x-text="p.title"></h4>
-                                <p class="text-sm opacity-95" x-text="p.desc"></p>
-                            </div>
+                <div @click="openModal(p)" 
+                     class="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden cursor-pointer transform hover:-translate-y-1.5">
+                    
+                    <!-- Thumbnail Image Container -->
+                    <div class="relative h-60 w-full overflow-hidden bg-gray-100">
+                        <img :src="p.image" :alt="p.title" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+                        
+                        <!-- Gradient Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity"></div>
+                        
+                        <!-- Status Badge -->
+                        <div class="absolute top-4 left-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/90 text-white backdrop-blur-md shadow-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                                Completed
+                            </span>
+                        </div>
+
+                        <!-- Category Badge -->
+                        <div class="absolute top-4 right-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-white/90 backdrop-blur-md text-primary shadow-sm" x-text="p.category"></span>
                         </div>
                     </div>
+
+                    <!-- Card Body -->
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors duration-200 mb-2" x-text="p.title"></h3>
+                            <p class="text-gray-600 text-sm line-clamp-2 leading-relaxed mb-6" x-text="p.desc"></p>
+                        </div>
+
+                        <!-- Card Footer Action -->
+                        <div class="pt-4 border-t border-gray-100 flex items-center justify-between text-xs font-semibold text-primary">
+                            <span class="inline-flex items-center gap-1">
+                                <i class="fas fa-shield-alt text-accent"></i> Shariah Compliant
+                            </span>
+                            <span class="inline-flex items-center gap-1 text-secondary group-hover:translate-x-1 transition-transform duration-200">
+                                View Details <i class="fas fa-arrow-right"></i>
+                            </span>
+                        </div>
+                    </div>
+
                 </div>
             </template>
         </div>
@@ -305,16 +346,63 @@
     </div>
 </footer>
 
-<!-- ===================== PROJECT MODAL ===================== -->
-<div x-show="activeModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-    <div @click.away="activeModal = null" class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-        <div class="p-5 border-b border-gray-100 flex justify-between items-center">
-            <h3 class="text-xl font-bold text-primary" x-text="activeModal?.title"></h3>
-            <button @click="activeModal = null" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"><i class="fas fa-times"></i></button>
+<!-- ===================== ENHANCED PROJECT MODAL ===================== -->
+<div x-show="activeModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
+    <div @click.away="activeModal = null" 
+         class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl transform transition-all">
+        
+        <!-- Modal Banner Image -->
+        <div class="relative h-64 bg-gray-100">
+            <img :src="activeModal?.image" :alt="activeModal?.title" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+            
+            <!-- Close Button -->
+            <button @click="activeModal = null" 
+                    class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/30 text-white backdrop-blur-md flex items-center justify-center hover:bg-black/50 transition-colors">
+                <i class="fas fa-times text-sm"></i>
+            </button>
+
+            <!-- Modal Banner Title -->
+            <div class="absolute bottom-4 left-6 right-6 text-white">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500 text-white inline-block mb-2">
+                    Fully Disbursed & Returned
+                </span>
+                <h3 class="text-2xl font-bold leading-tight" x-text="activeModal?.title"></h3>
+            </div>
         </div>
-        <div class="p-5" x-if="activeModal">
-            <img :src="activeModal?.image" :alt="activeModal?.title" class="w-full h-48 object-cover rounded-xl mb-4">
-            <p class="text-gray-600" x-text="activeModal?.desc"></p>
+
+        <!-- Modal Body Content -->
+        <div class="p-6 space-y-6">
+            <div>
+                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Project Overview</h4>
+                <p class="text-gray-700 text-sm leading-relaxed" x-text="activeModal?.desc"></p>
+            </div>
+
+            <!-- Highlights Grid -->
+            <div class="grid grid-cols-2 gap-4 bg-cream rounded-2xl p-4 border border-gray-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-hand-holding-usd text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="text-[11px] text-gray-500 font-medium">Model</div>
+                        <div class="text-xs font-bold text-primary">Profit-Sharing</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-accent/10 text-accent flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-check-circle text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="text-[11px] text-gray-500 font-medium">Status</div>
+                        <div class="text-xs font-bold text-gray-800">Completed</div>
+                    </div>
+                </div>
+            </div>
+
+            <button @click="activeModal = null" class="w-full bg-primary text-white py-3.5 rounded-xl font-semibold hover:bg-secondary transition-colors text-sm shadow-md">
+                Close
+            </button>
         </div>
     </div>
 </div>
@@ -372,7 +460,7 @@
                 </div>
 
                 <button type="submit" :disabled="submitting" class="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-secondary transition flex items-center justify-center gap-2">
-                    <span x-show="!submitting">Confirm Investment</span>
+                    <span x-show="!submitting">Confirm</span>
                     <span x-show="submitting"><i class="fas fa-spinner fa-spin mr-1"></i> Processing...</span>
                 </button>
             </form>
@@ -391,7 +479,6 @@ function urborApp() {
         cart: [],
         submitting: false,
         
-        // REPLACE THIS WITH YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
         scriptUrl: 'https://script.google.com/macros/s/AKfycbxY5B5uacoV-KpuHmYqgSoO-fQbA5FdJ2nZ27lc116niw4OJRt-UVQmioaXaHBDkb34cg/exec',
 
         form: {
@@ -402,12 +489,12 @@ function urborApp() {
         },
 
         pastProjects: [
-            { title: 'Maize Pilot Project', desc: 'Sustainable maize cultivation with modern techniques', image: 'content/images/1-Maize-Pilot-Project.png' },
-            { title: 'Mixed Vegetable Project', desc: 'Diverse vegetable cultivation for market stability', image: 'content/images/2-Mixed-Vegetable-Pilot-Project.png' },
-            { title: 'Cattle Project', desc: 'Livestock development for sustainable farming', image: 'content/images/3-Cattle-Project.png' },
-            { title: 'Duck Farming Project', desc: 'Poultry diversification for increased income', image: 'content/images/4-Duck-(Meat)-Pilot-Project.png' },
-            { title: 'Chicken Egg Project', desc: 'Egg production with improved poultry breeds', image: 'content/images/5-Faomi-Chicken-(Egg)-Pilot-Project.png' },
-            { title: 'Goat Project', desc: 'Goat rearing for sustainable livestock income', image: 'content/images/6-Goat-Project---1.png' }
+            { title: 'Maize Pilot Project', category: 'Crops', desc: 'Sustainable maize cultivation leveraging modern precision agricultural techniques.', image: 'content/images/1-Maize-Pilot-Project.png' },
+            { title: 'Mixed Vegetable Project', category: 'Crops', desc: 'Diverse vegetable crop rotation ensuring continuous yield and market stability.', image: 'content/images/2-Mixed-Vegetable-Pilot-Project.png' },
+            { title: 'Cattle Project', category: 'Livestock', desc: 'Scientific cattle rearing and health management for sustainable meat production.', image: 'content/images/3-Cattle-Project.png' },
+            { title: 'Duck Farming Project', category: 'Poultry', desc: 'High-density poultry diversification designed for optimized smallholder returns.', image: 'content/images/4-Duck-(Meat)-Pilot-Project.png' },
+            { title: 'Chicken Egg Project', category: 'Poultry', desc: 'Commercial layer farming utilizing modern disease-control and nutrition standards.', image: 'content/images/5-Faomi-Chicken-(Egg)-Pilot-Project.png' },
+            { title: 'Goat Project', category: 'Livestock', desc: 'Zero-risk goat breeding and rearing optimized for community income generation.', image: 'content/images/6-Goat-Project---1.png' }
         ],
 
         get cartCount() {
@@ -459,7 +546,7 @@ function urborApp() {
             try {
                 const response = await fetch(this.scriptUrl, {
                     method: 'POST',
-                    mode: 'no-cors', // standard mode for Apps Script cross-origin POST
+                    mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
